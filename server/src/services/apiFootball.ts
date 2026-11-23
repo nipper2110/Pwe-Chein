@@ -1,5 +1,6 @@
 import { config } from "../config.js";
 import { CacheEntry } from "../models/CacheEntry.js";
+import { todayIn } from "../utils/timezone.js";
 
 const BASE_URL = "https://v3.football.api-sports.io";
 
@@ -171,19 +172,23 @@ const LIVE_STATUSES = new Set(["1H", "HT", "2H", "ET", "BT", "P", "LIVE", "INT"]
  * - past day: 7 days (finished, never changes)
  * - future day: 6 hours
  * - today: 5 minutes if one of our matches is live, otherwise 1 hour
- * Dates are compared in UTC, because API-Football's default timezone is UTC.
+ * "Today" is the current date in the user's time zone, because `date` is a date in that zone.
  */
-export function fixturesTtl(date: string, fixtures: Fixture[], now: Date = new Date()): number {
-  const today = now.toISOString().slice(0, 10);
+export function fixturesTtl(date: string, fixtures: Fixture[], timezone: string, now: Date = new Date()): number {
+  const today = todayIn(timezone, now);
   if (date < today) return TTL.FIXTURES_PAST;
   if (date > today) return TTL.FIXTURES_FUTURE;
   const anyLive = onlySupported(fixtures).some((f) => LIVE_STATUSES.has(f.fixture.status.short));
   return anyLive ? TTL.FIXTURES_TODAY_LIVE : TTL.FIXTURES;
 }
 
-/** All fixtures on a date (YYYY-MM-DD). Cache time depends on the date. Filtered to our 6 leagues. */
-export async function getFixturesByDate(date: string): Promise<Fixture[]> {
-  const all = await cachedFetch<Fixture[]>("/fixtures", { date }, (data) => fixturesTtl(date, data));
+/**
+ * All fixtures on a date (YYYY-MM-DD) in the given time zone. Cache time depends on the date.
+ * The time zone is part of the request params, so it is part of the cache key too:
+ * "2026-11-24 in Asia/Yangon" and "2026-11-24 in UTC" are different lists of matches.
+ */
+export async function getFixturesByDate(date: string, timezone: string): Promise<Fixture[]> {
+  const all = await cachedFetch<Fixture[]>("/fixtures", { date, timezone }, (data) => fixturesTtl(date, data, timezone));
   return onlySupported(all);
 }
 

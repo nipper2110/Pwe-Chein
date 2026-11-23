@@ -9,7 +9,8 @@ async function getJson<T>(url: string): Promise<T> {
   return (await res.json()) as T
 }
 
-export const fetchFixtures = (date: string): Promise<Fixture[]> =>
-  getJson<Fixture[]>(`/api/fixtures?date=${date}`)
+// The server groups matches into days using the user's time zone, so "today" matches what they see.
+export const fetchFixtures = (date: string, timezone: string): Promise<Fixture[]> =>
+  getJson<Fixture[]>(`/api/fixtures?date=${date}&timezone=${encodeURIComponent(timezone)}`)
 
 export const fetchLiveFixtures = (): Promise<Fixture[]> => getJson<Fixture[]>('/api/fixtures/live')
