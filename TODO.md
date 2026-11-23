@@ -25,3 +25,5 @@
 - [ ] Social link previews (WhatsApp, Facebook) do not run JavaScript, so every page shows the generic site preview. Fixing it needs prerendering or server-side rendering.
 - [ ] Some team logos (for example Juventus) are white/outlined and look faint on the light theme.
 - [ ] The dashboard and match cards could use a "last updated" hint, since cached data can be up to an hour old.
+- [ ] The "Matches" icon is a goal net (`Goal`) because Lucide has no football. A small custom SVG ball would look better.
+- [ ] Desktop has no "Account" page link (the avatar menu covers it); only the mobile tab bar opens `/account`.

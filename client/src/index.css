@@ -47,6 +47,16 @@
   --color-slate-950: #f8fafc;
 }
 
+/* Keep jumped-to and focused elements from hiding behind the sticky header / mobile tab bar. */
+html {
+  scroll-padding-top: 4.5rem;
+}
+@media (max-width: 767px) {
+  html {
+    scroll-padding-bottom: 5rem;
+  }
+}
+
 body {
   background-color: var(--color-base);
   color: var(--color-slate-200);

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
+import Account from './pages/Account'
 import Dashboard from './pages/Dashboard'
 import Home from './pages/Home'
 import League from './pages/League'
@@ -49,6 +50,7 @@ function App() {
         <Route path="/league/:id" element={<League />} />
         <Route path="/match/:id" element={<Match />} />
         <Route path="/team/:id" element={<Team />} />
+        <Route path="/account" element={<Account />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         {/* Everything inside needs a login */}

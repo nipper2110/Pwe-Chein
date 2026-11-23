@@ -39,14 +39,17 @@ function FollowedMatches({ teamIds }: { teamIds: Set<number> }) {
 }
 
 export default function Dashboard() {
-  usePageMeta({ title: 'Dashboard', noindex: true })
+  usePageMeta({ title: 'My teams', noindex: true })
   const user = useUser()
   const favorites = useFavorites()
   const teamIds = useMemo(() => new Set((favorites.data ?? []).map((f) => f.teamId)), [favorites.data])
 
   return (
     <PageLayout className="space-y-6">
-      <h1 className="text-xl font-bold">Welcome, {user.data?.name}</h1>
+      <div>
+        <h1 className="text-xl font-bold">My teams</h1>
+        <p className="text-sm text-slate-400">Welcome back, {user.data?.name}</p>
+      </div>
 
       {favorites.isPending && <TableSkeleton rows={3} />}
       {favorites.isError && <ErrorState message={favorites.error.message} onRetry={() => void favorites.refetch()} />}
