@@ -192,3 +192,44 @@ export async function getLiveFixtures(): Promise<Fixture[]> {
   const live = Object.keys(SUPPORTED_LEAGUES).join("-");
   return cachedFetch<Fixture[]>("/fixtures", { live }, TTL.LIVE);
 }
+
+// ---------- Standings & top scorers (Phase 4) ----------
+
+export interface StandingRow {
+  rank: number;
+  team: { id: number; name: string; logo: string };
+  points: number;
+  goalsDiff: number;
+  group: string;
+  form: string | null;
+  description: string | null;
+  all: { played: number; win: number; draw: number; lose: number; goals: { for: number; against: number } };
+}
+
+export interface StandingsResult {
+  league: { id: number; name: string; logo: string; season: number; standings: StandingRow[][] };
+}
+
+export interface TopScorer {
+  player: { id: number; name: string; photo: string };
+  statistics: {
+    team: { id: number; name: string; logo: string };
+    games: { appearences: number | null };
+    goals: { total: number | null; assists: number | null };
+  }[];
+}
+
+/** League table(s) for the configured SEASON, cached 6 hours. Some leagues have several groups. */
+export async function getStandings(leagueId: number): Promise<StandingRow[][]> {
+  const data = await cachedFetch<StandingsResult[]>(
+    "/standings",
+    { league: leagueId, season: config.SEASON },
+    TTL.STANDINGS,
+  );
+  return data[0]?.league.standings ?? [];
+}
+
+/** Top 20 scorers for the configured SEASON, cached 6 hours. */
+export function getTopScorers(leagueId: number): Promise<TopScorer[]> {
+  return cachedFetch<TopScorer[]>("/players/topscorers", { league: leagueId, season: config.SEASON }, TTL.STANDINGS);
+}

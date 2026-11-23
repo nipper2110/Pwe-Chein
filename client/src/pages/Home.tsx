@@ -5,6 +5,7 @@ import ErrorState from '../components/ErrorState'
 import LeagueSection from '../components/LeagueSection'
 import MatchListSkeleton from '../components/MatchListSkeleton'
 import SeasonBadge from '../components/SeasonBadge'
+import SiteHeader from '../components/SiteHeader'
 import { useFixtures, useLiveFixtures } from '../hooks/useFixtures'
 import { useNow } from '../hooks/useNow'
 import type { Fixture } from '../types/fixture'
@@ -45,13 +46,10 @@ export default function Home() {
 
   return (
     <main className="mx-auto max-w-2xl space-y-5 p-4">
-      <header>
-        <h1 className="font-burmese text-3xl font-bold text-pitch">ပွဲချိန်</h1>
-        <p className="text-sm text-slate-400">Live Football Scores & Stats</p>
-        <p className="mt-2 flex items-center gap-2 text-xs text-slate-500">
-          <SeasonBadge /> Standings and top scorers use this season (free API plan limit).
-        </p>
-      </header>
+      <SiteHeader />
+      <p className="flex items-center gap-2 text-xs text-slate-500">
+        <SeasonBadge /> Standings and top scorers use this season (free API plan limit).
+      </p>
 
       <DatePicker value={date} now={now} onChange={setDate} />
 
