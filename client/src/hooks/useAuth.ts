@@ -33,6 +33,9 @@ export function useLogout() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: logoutUser,
-    onSuccess: () => queryClient.setQueryData(ME_KEY, null),
+    onSuccess: () => {
+      queryClient.setQueryData(ME_KEY, null)
+      queryClient.removeQueries({ queryKey: ['favorites'] }) // private data: forget it on logout
+    },
   })
 }

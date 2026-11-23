@@ -370,6 +370,11 @@ async function getTeamSummary(teamId: number, leagueId: number): Promise<TeamSum
   };
 }
 
+/** One team's basic info (name, logo, venue), cached 24h. Returns null if the team does not exist. */
+export async function getTeamInfo(teamId: number): Promise<TeamInfo | null> {
+  return (await cachedFetch<TeamInfo[]>("/teams", { id: teamId }, TTL.STATIC))[0] ?? null;
+}
+
 // Competitions that are not competitive matches. The API's fixture data has no "type" field,
 // so we go by name. Real examples: "Friendlies Clubs", "Premier League - Summer Series".
 // The Community Shield is a real trophy match, so it is NOT excluded.
@@ -384,7 +389,7 @@ export const isCompetitive = (f: Fixture): boolean => !NON_COMPETITIVE.test(f.le
  * Returns null if the team does not exist.
  */
 export async function getTeam(teamId: number): Promise<TeamPage | null> {
-  const info = (await cachedFetch<TeamInfo[]>("/teams", { id: teamId }, TTL.STATIC))[0];
+  const info = await getTeamInfo(teamId);
   if (!info) return null;
 
   // Friendlies and pre-season tours are removed here, after the cache, so no extra API request is needed.

@@ -1,4 +1,5 @@
 import type { TeamDetail } from '../types/team'
+import FollowButton from './FollowButton'
 
 function Fact({ label, value }: { label: string; value: string | number | null }) {
   if (value === null || value === '') return null
@@ -16,7 +17,10 @@ export default function TeamHeader({ data }: { data: TeamDetail }) {
     <section className="flex flex-wrap items-center gap-4 rounded-xl bg-surface p-4">
       <img src={team.logo} alt="" className="h-20 w-20 object-contain" />
       <div className="min-w-0 flex-1">
-        <h1 className="text-2xl font-bold">{team.name}</h1>
+        <div className="flex flex-wrap items-start justify-between gap-2">
+          <h1 className="text-2xl font-bold">{team.name}</h1>
+          <FollowButton teamId={team.id} teamName={team.name} />
+        </div>
         <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
           <Fact label="Country" value={team.country} />
           <Fact label="Founded" value={team.founded} />
