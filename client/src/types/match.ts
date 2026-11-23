@@ -27,7 +27,13 @@ export interface TeamStatistics {
   statistics: { type: string; value: number | string | null }[]
 }
 
+export interface ScorePair {
+  home: number | null
+  away: number | null
+}
+
 export interface MatchDetail extends Fixture {
+  score: { halftime: ScorePair; fulltime: ScorePair }
   fixture: Fixture['fixture'] & { venue: { name: string | null; city: string | null }; referee: string | null }
   league: Fixture['league'] & { round: string }
   events: MatchEvent[]

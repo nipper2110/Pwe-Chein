@@ -14,11 +14,6 @@ const rank = (type: string): number => {
   return i === -1 ? ORDER.length : i
 }
 
-const prettify = (type: string): string => {
-  const text = type.replace(/_/g, ' ')
-  return text.charAt(0).toUpperCase() + text.slice(1)
-}
-
 export default function StatisticsBars({ match }: { match: MatchDetail }) {
   const [home, away] = [match.statistics[0], match.statistics[1]]
   if (!home || !away) return <EmptyState text="Statistics are not available for this match yet." />
@@ -39,7 +34,7 @@ export default function StatisticsBars({ match }: { match: MatchDetail }) {
         {rows.map((s) => (
           <StatRow
             key={s.type}
-            label={prettify(s.type)}
+            type={s.type}
             home={s.value}
             away={away.statistics.find((x) => x.type === s.type)?.value ?? null}
           />
