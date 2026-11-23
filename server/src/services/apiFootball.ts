@@ -129,3 +129,43 @@ export async function getApiStatus(): Promise<ApiStatus> {
 export function getLeague(leagueId: number): Promise<unknown[]> {
   return cachedFetch<unknown[]>("/leagues", { id: leagueId, season: config.SEASON }, TTL.STATIC);
 }
+
+// ---------- Fixtures (Phase 3) ----------
+
+export const SUPPORTED_LEAGUES: Record<number, string> = {
+  39: "Premier League",
+  140: "La Liga",
+  135: "Serie A",
+  78: "Bundesliga",
+  61: "Ligue 1",
+  2: "Champions League",
+};
+
+export interface Fixture {
+  fixture: {
+    id: number;
+    date: string;
+    status: { long: string; short: string; elapsed: number | null };
+  };
+  league: { id: number; name: string; country: string; logo: string };
+  teams: {
+    home: { id: number; name: string; logo: string };
+    away: { id: number; name: string; logo: string };
+  };
+  goals: { home: number | null; away: number | null };
+}
+
+function onlySupported(fixtures: Fixture[]): Fixture[] {
+  return fixtures.filter((f) => f.league.id in SUPPORTED_LEAGUES);
+}
+
+/** All fixtures on a date (YYYY-MM-DD), cached 1 hour. Filtered to our 6 leagues. */
+export async function getFixturesByDate(date: string): Promise<Fixture[]> {
+  return onlySupported(await cachedFetch<Fixture[]>("/fixtures", { date }, TTL.FIXTURES));
+}
+
+/** Matches being played right now in our 6 leagues, cached only 60 seconds. */
+export async function getLiveFixtures(): Promise<Fixture[]> {
+  const live = Object.keys(SUPPORTED_LEAGUES).join("-");
+  return cachedFetch<Fixture[]>("/fixtures", { live }, TTL.LIVE);
+}
