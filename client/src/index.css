@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+/* "Stadium Night" dark theme */
+@theme {
+  --color-pitch: #10b981; /* main green */
+  --color-live: #ef4444; /* LIVE badge, goals only */
+  --color-surface: #0f172a; /* cards */
+  --color-base: #020617; /* background */
+
+  --font-sans: "Inter", "Noto Sans Myanmar", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-burmese: "Noto Sans Myanmar", sans-serif;
+}
+
+body {
+  background-color: var(--color-base);
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+}
