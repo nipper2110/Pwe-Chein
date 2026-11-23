@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { LEAGUES, leagueLogo } from '../utils/leagues'
+import LeagueLogo from './LeagueLogo'
 
 export default function LeagueSwitcher({ activeId }: { activeId: number }) {
   const scrollRef = useRef<HTMLElement>(null)
@@ -36,7 +37,7 @@ export default function LeagueSwitcher({ activeId }: { activeId: number }) {
               l.id === activeId ? 'bg-pitch text-base' : 'bg-surface text-slate-300 hover:bg-slate-800'
             }`}
           >
-            <img src={leagueLogo(l.id)} alt="" className="h-4 w-4 rounded-sm bg-white/90 object-contain p-px" />
+            <LeagueLogo src={leagueLogo(l.id)} size="sm" />
             {l.name}
           </Link>
         ))}

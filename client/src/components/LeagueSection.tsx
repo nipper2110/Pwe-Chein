@@ -1,4 +1,5 @@
 import type { Fixture } from '../types/fixture'
+import LeagueLogo from './LeagueLogo'
 import MatchCard from './MatchCard'
 
 interface Props {
@@ -13,7 +14,7 @@ export default function LeagueSection({ title, logo, matches, showDate, resultFo
   return (
     <section className="overflow-hidden rounded-xl bg-surface">
       <h2 className="flex items-center gap-2 px-4 py-3 text-sm font-semibold">
-        {logo && <img src={logo} alt="" className="h-5 w-5 object-contain" />}
+        {logo && <LeagueLogo src={logo} />}
         {title}
       </h2>
       {matches.map((m) => (

@@ -4,6 +4,7 @@ import ErrorState from '../components/ErrorState'
 import FormDots from '../components/FormDots'
 import LeagueSection from '../components/LeagueSection'
 import SeasonBadge from '../components/SeasonBadge'
+import SeasonSummary from '../components/SeasonSummary'
 import SiteHeader from '../components/SiteHeader'
 import TableSkeleton from '../components/TableSkeleton'
 import TeamHeader from '../components/TeamHeader'
@@ -41,8 +42,10 @@ function TeamView({ teamId }: { teamId: number }) {
           <TeamHeader data={team.data} />
 
           <p className="flex items-center gap-2 text-xs text-slate-500">
-            <SeasonBadge /> Results and fixtures come from this season (free API plan limit).
+            <SeasonBadge /> Results and stats come from this season (free API plan limit).
           </p>
+
+          {team.data.summary && <SeasonSummary summary={team.data.summary} />}
 
           <section aria-labelledby="recent-title" className="space-y-2">
             <div className="flex items-center gap-3">
@@ -57,14 +60,13 @@ function TeamView({ teamId }: { teamId: number }) {
             )}
           </section>
 
-          <section aria-labelledby="next-title" className="space-y-2">
-            <h2 id="next-title" className="font-semibold">Next fixtures</h2>
-            {team.data.upcoming.length === 0 ? (
-              <EmptyState text="No upcoming fixtures in this season. The free API plan can't show the current season." />
-            ) : (
+          {/* Only shown when there are upcoming matches (the free plan usually has none). */}
+          {team.data.upcoming.length > 0 && (
+            <section aria-labelledby="next-title" className="space-y-2">
+              <h2 id="next-title" className="font-semibold">Next fixtures</h2>
               <LeagueSection title="Upcoming" matches={team.data.upcoming} showDate />
-            )}
-          </section>
+            </section>
+          )}
         </>
       )}
     </TeamShell>

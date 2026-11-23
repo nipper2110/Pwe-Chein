@@ -1,6 +1,7 @@
 import { Navigate, useParams } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
+import LeagueLogo from '../components/LeagueLogo'
 import LeagueSwitcher from '../components/LeagueSwitcher'
 import SeasonBadge from '../components/SeasonBadge'
 import SiteHeader from '../components/SiteHeader'
@@ -28,7 +29,7 @@ function LeagueView({ leagueId }: { leagueId: number }) {
       <LeagueSwitcher activeId={leagueId} />
 
       <div className="flex items-center gap-3">
-        <img src={leagueLogo(leagueId)} alt="" className="h-10 w-10 rounded bg-white/90 object-contain p-1" />
+        <LeagueLogo src={leagueLogo(leagueId)} size="lg" />
         <h1 className="text-xl font-bold">{league?.name}</h1>
         <SeasonBadge />
       </div>

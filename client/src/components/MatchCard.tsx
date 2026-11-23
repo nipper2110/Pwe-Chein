@@ -5,11 +5,19 @@ import { isFinished, isLive, isNotStarted } from '../utils/fixtureStatus'
 import { resultFor } from '../utils/results'
 import LiveBadge from './LiveBadge'
 
-function TeamName({ team, align }: { team: Team; align: 'left' | 'right' }) {
+interface TeamNameProps {
+  team: Team
+  align: 'left' | 'right'
+  /** On a team's page: the page's own team is muted and the opponent is bold, so rows scan faster. */
+  role?: 'own' | 'opponent'
+}
+
+function TeamName({ team, align, role }: TeamNameProps) {
+  const nameClass = role === 'own' ? 'text-slate-500' : role === 'opponent' ? 'font-bold text-white' : ''
   return (
     <div className={`flex flex-1 items-center gap-2 ${align === 'right' ? 'flex-row-reverse text-right' : ''}`}>
       <img src={team.logo} alt="" loading="lazy" className="h-6 w-6 shrink-0 object-contain" />
-      <span className="truncate text-sm">{team.name}</span>
+      <span className={`truncate text-sm ${nameClass}`}>{team.name}</span>
     </div>
   )
 }
@@ -20,6 +28,9 @@ const RESULT_STYLE = {
   D: { border: 'border-l-slate-500', label: 'Draw' },
   L: { border: 'border-l-amber-500', label: 'Loss' },
 } as const
+
+const roleOf = (teamId: number, ownId: number | undefined): TeamNameProps['role'] =>
+  ownId === undefined ? undefined : teamId === ownId ? 'own' : 'opponent'
 
 interface Props {
   match: Fixture
@@ -42,7 +53,7 @@ export default function MatchCard({ match, showDate = false, resultForTeamId }: 
         style ? `border-l-4 ${style.border}` : ''
       }`}
     >
-      <TeamName team={match.teams.home} align="left" />
+      <TeamName team={match.teams.home} align="left" role={roleOf(match.teams.home.id, resultForTeamId)} />
 
       <div className={`flex shrink-0 flex-col items-center gap-1 ${showDate ? 'w-24' : 'w-20'}`}>
         {showDate && (
@@ -64,7 +75,7 @@ export default function MatchCard({ match, showDate = false, resultForTeamId }: 
         {style && <span className="sr-only">{style.label}</span>}
       </div>
 
-      <TeamName team={match.teams.away} align="right" />
+      <TeamName team={match.teams.away} align="right" role={roleOf(match.teams.away.id, resultForTeamId)} />
     </Link>
   )
 }

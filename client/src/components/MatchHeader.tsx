@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import type { MatchDetail } from '../types/match'
 import { formatKickoff } from '../utils/dates'
 import { isFinished, isLive, isNotStarted } from '../utils/fixtureStatus'
+import LeagueLogo from './LeagueLogo'
 import LiveBadge from './LiveBadge'
 
 export default function MatchHeader({ match }: { match: MatchDetail }) {
@@ -13,7 +14,7 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
   return (
     <section className="rounded-xl bg-surface p-4 text-center">
       <Link to={`/league/${match.league.id}`} className="mb-4 inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200">
-        <img src={match.league.logo} alt="" className="h-4 w-4 rounded-sm bg-white/90 object-contain p-px" />
+        <LeagueLogo src={match.league.logo} size="sm" />
         {match.league.name} · {match.league.round}
       </Link>
 

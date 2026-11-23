@@ -306,10 +306,68 @@ export interface TeamInfo {
   venue: { name: string | null; city: string | null; capacity: number | null; image: string | null };
 }
 
+export interface TeamSummary {
+  league: { id: number; name: string; logo: string };
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  cleanSheets: number;
+  formation: string | null; // the most used formation
+  formationPlayed: number;
+}
+
 export interface TeamPage extends TeamInfo {
   season: number;
+  summary: TeamSummary | null; // null if the team has no match in one of our 6 leagues
   recent: Fixture[]; // newest first
   upcoming: Fixture[]; // soonest first
+}
+
+interface TeamStatsResponse {
+  league: { id: number; name: string; logo: string };
+  fixtures: { played: { total: number }; wins: { total: number }; draws: { total: number }; loses: { total: number } };
+  goals: { for: { total: { total: number } }; against: { total: { total: number } } };
+  clean_sheet: { total: number };
+  lineups: { formation: string; played: number }[];
+}
+
+/**
+ * The league whose stats we summarise: the team's most played league among our 6,
+ * preferring the domestic league over the Champions League (id 2).
+ */
+function mainLeagueId(season: Fixture[]): number | null {
+  const counts = new Map<number, number>();
+  for (const f of season) {
+    if (f.league.id in SUPPORTED_LEAGUES) counts.set(f.league.id, (counts.get(f.league.id) ?? 0) + 1);
+  }
+  const domestic = [...counts].filter(([id]) => id !== 2).sort((a, b) => b[1] - a[1])[0];
+  if (domestic) return domestic[0];
+  return counts.has(2) ? 2 : null;
+}
+
+/** Season totals for one team in one league (1 request, cached 24h). */
+async function getTeamSummary(teamId: number, leagueId: number): Promise<TeamSummary> {
+  const stats = await cachedFetch<TeamStatsResponse>(
+    "/teams/statistics",
+    { team: teamId, league: leagueId, season: config.SEASON },
+    TTL.STATIC,
+  );
+  const top = [...stats.lineups].sort((a, b) => b.played - a.played)[0];
+  return {
+    league: { id: stats.league.id, name: stats.league.name, logo: stats.league.logo },
+    played: stats.fixtures.played.total,
+    wins: stats.fixtures.wins.total,
+    draws: stats.fixtures.draws.total,
+    losses: stats.fixtures.loses.total,
+    goalsFor: stats.goals.for.total.total,
+    goalsAgainst: stats.goals.against.total.total,
+    cleanSheets: stats.clean_sheet.total,
+    formation: top?.formation ?? null,
+    formationPlayed: top?.played ?? 0,
+  };
 }
 
 /**
@@ -325,9 +383,21 @@ export async function getTeam(teamId: number): Promise<TeamPage | null> {
   const season = await cachedFetch<Fixture[]>("/fixtures", { team: teamId, season: config.SEASON }, TTL.STATIC);
   const byDate = (a: Fixture, b: Fixture): number => a.fixture.date.localeCompare(b.fixture.date);
 
+  // The summary is a bonus: if it fails, the rest of the page should still load.
+  const leagueId = mainLeagueId(season);
+  let summary: TeamSummary | null = null;
+  if (leagueId !== null) {
+    try {
+      summary = await getTeamSummary(teamId, leagueId);
+    } catch (err) {
+      console.error("[team] summary failed:", err instanceof Error ? err.message : err);
+    }
+  }
+
   return {
     ...info,
     season: config.SEASON,
+    summary,
     recent: season.filter((f) => FINISHED_STATUSES.has(f.fixture.status.short)).sort(byDate).reverse().slice(0, 5),
     upcoming: season.filter((f) => ["NS", "TBD"].includes(f.fixture.status.short)).sort(byDate).slice(0, 5),
   };
