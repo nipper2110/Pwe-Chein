@@ -41,7 +41,7 @@ export default function Login() {
         </button>
       </form>
       <p className="text-sm text-slate-400">
-        New here? <Link to="/register" state={{ from }} className="text-pitch hover:underline">Create an account</Link>
+        New here? <Link to="/register" state={{ from }} className="text-pitch underline underline-offset-2 hover:no-underline">Create an account</Link>
       </p>
     </AuthPageShell>
   )

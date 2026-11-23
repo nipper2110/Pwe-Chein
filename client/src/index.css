@@ -13,10 +13,17 @@
   --font-sans: "Inter", "Noto Sans Myanmar", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-burmese: "Noto Sans Myanmar", sans-serif;
+  --font-pixel: "Press Start 2P", ui-monospace, monospace;
 }
 
 :root {
   color-scheme: dark; /* makes scrollbars and form controls dark too */
+
+  /* Pixel-art logo colours (X outline, W white, B dark patches, L motion lines) */
+  --pixel-x: #10b981;
+  --pixel-w: #f8fafc;
+  --pixel-b: #0f172a;
+  --pixel-l: #34d399;
 }
 
 /*
@@ -45,6 +52,11 @@
   --color-slate-800: #e2e8f0;
   --color-slate-900: #f1f5f9;
   --color-slate-950: #f8fafc;
+
+  /* On white, the light-green motion lines and outline would fade, so they get stronger greens. */
+  --pixel-x: #059669;
+  --pixel-w: #ffffff;
+  --pixel-l: #10b981;
 }
 
 /* Keep jumped-to and focused elements from hiding behind the sticky header / mobile tab bar. */

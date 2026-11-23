@@ -44,7 +44,7 @@ export default function Register() {
         </button>
       </form>
       <p className="text-sm text-slate-400">
-        Already have an account? <Link to="/login" state={{ from }} className="text-pitch hover:underline">Log in</Link>
+        Already have an account? <Link to="/login" state={{ from }} className="text-pitch underline underline-offset-2 hover:no-underline">Log in</Link>
       </p>
     </AuthPageShell>
   )
