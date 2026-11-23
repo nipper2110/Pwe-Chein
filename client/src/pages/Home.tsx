@@ -4,6 +4,7 @@ import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
 import LeagueSection from '../components/LeagueSection'
 import MatchListSkeleton from '../components/MatchListSkeleton'
+import SeasonBadge from '../components/SeasonBadge'
 import { useFixtures, useLiveFixtures } from '../hooks/useFixtures'
 import { useNow } from '../hooks/useNow'
 import type { Fixture } from '../types/fixture'
@@ -47,6 +48,9 @@ export default function Home() {
       <header>
         <h1 className="font-burmese text-3xl font-bold text-pitch">ပွဲချိန်</h1>
         <p className="text-sm text-slate-400">Live Football Scores & Stats</p>
+        <p className="mt-2 flex items-center gap-2 text-xs text-slate-500">
+          <SeasonBadge /> Standings and top scorers use this season (free API plan limit).
+        </p>
       </header>
 
       <DatePicker value={date} now={now} onChange={setDate} />
