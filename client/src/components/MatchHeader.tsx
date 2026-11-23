@@ -18,10 +18,10 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
       </Link>
 
       <div className="flex items-center justify-center gap-3">
-        <div className="flex flex-1 flex-col items-center gap-2">
+        <Link to={`/team/${home.id}`} className="flex flex-1 flex-col items-center gap-2 hover:text-pitch">
           <img src={home.logo} alt="" className="h-14 w-14 object-contain" />
           <span className="text-sm font-semibold">{home.name}</span>
-        </div>
+        </Link>
 
         <div className="flex w-32 shrink-0 flex-col items-center gap-1">
           {isNotStarted(match) ? (
@@ -35,10 +35,10 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
           {!live && <span className="text-xs uppercase text-slate-400">{isFinished(match) ? 'Full time' : status.long}</span>}
         </div>
 
-        <div className="flex flex-1 flex-col items-center gap-2">
+        <Link to={`/team/${away.id}`} className="flex flex-1 flex-col items-center gap-2 hover:text-pitch">
           <img src={away.logo} alt="" className="h-14 w-14 object-contain" />
           <span className="text-sm font-semibold">{away.name}</span>
-        </div>
+        </Link>
       </div>
 
       <p className="mt-4 text-xs text-slate-500">

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { StandingRow } from '../types/league'
 import { buildZones } from '../utils/standingsZones'
 import FormDots from './FormDots'
@@ -36,10 +37,10 @@ export default function StandingsTable({ rows }: { rows: StandingRow[] }) {
                     {r.rank}
                   </td>
                   <td className="px-2">
-                    <span className="flex items-center gap-2">
+                    <Link to={`/team/${r.team.id}`} className="flex items-center gap-2 hover:text-pitch">
                       <img src={r.team.logo} alt="" loading="lazy" className="h-5 w-5 shrink-0 object-contain" />
                       <span className="truncate">{r.team.name}</span>
-                    </span>
+                    </Link>
                   </td>
                   <td className="px-2 text-center font-mono">{r.all.played}</td>
                   <td className="hidden px-2 text-center font-mono sm:table-cell">{r.all.win}</td>

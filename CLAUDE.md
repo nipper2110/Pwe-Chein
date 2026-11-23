@@ -93,6 +93,7 @@ Defined in `client/src/index.css`:
   4. What I should learn from this phase
 - Wait for me to say "next" before starting the next phase.
 - Suggest a git commit message at the end of each phase.
+- **Never run `git commit` or `git push`** (and never create commits or pushes in any other way). I commit and push myself. At the end of each phase, only give me the suggested commit message.
 
 ## Phases
 

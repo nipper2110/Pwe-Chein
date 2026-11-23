@@ -298,3 +298,37 @@ export async function getMatch(fixtureId: number): Promise<MatchDetail | null> {
   if (!match || !(match.league.id in SUPPORTED_LEAGUES)) return null;
   return match;
 }
+
+// ---------- Team page (Phase 6) ----------
+
+export interface TeamInfo {
+  team: { id: number; name: string; code: string | null; country: string | null; founded: number | null; logo: string };
+  venue: { name: string | null; city: string | null; capacity: number | null; image: string | null };
+}
+
+export interface TeamPage extends TeamInfo {
+  season: number;
+  recent: Fixture[]; // newest first
+  upcoming: Fixture[]; // soonest first
+}
+
+/**
+ * Team info + recent results + next fixtures.
+ * Free plan: "last" and "next" are blocked, and only seasons 2022-2024 are allowed.
+ * So we fetch the team's whole season ONCE (cached 24h) and pick recent/upcoming ourselves.
+ * Returns null if the team does not exist.
+ */
+export async function getTeam(teamId: number): Promise<TeamPage | null> {
+  const info = (await cachedFetch<TeamInfo[]>("/teams", { id: teamId }, TTL.STATIC))[0];
+  if (!info) return null;
+
+  const season = await cachedFetch<Fixture[]>("/fixtures", { team: teamId, season: config.SEASON }, TTL.STATIC);
+  const byDate = (a: Fixture, b: Fixture): number => a.fixture.date.localeCompare(b.fixture.date);
+
+  return {
+    ...info,
+    season: config.SEASON,
+    recent: season.filter((f) => FINISHED_STATUSES.has(f.fixture.status.short)).sort(byDate).reverse().slice(0, 5),
+    upcoming: season.filter((f) => ["NS", "TBD"].includes(f.fixture.status.short)).sort(byDate).slice(0, 5),
+  };
+}
