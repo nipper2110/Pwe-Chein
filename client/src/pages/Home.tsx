@@ -45,7 +45,7 @@ export default function Home() {
   }, [day.data, liveMatches])
 
   return (
-    <main className="mx-auto max-w-2xl space-y-5 p-4">
+    <main className="mx-auto max-w-3xl space-y-5 p-4">
       <SiteHeader />
       <p className="flex items-center gap-2 text-xs text-slate-500">
         <SeasonBadge /> Standings and top scorers use this season (free API plan limit).

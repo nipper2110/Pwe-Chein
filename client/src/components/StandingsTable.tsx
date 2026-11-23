@@ -20,8 +20,8 @@ export default function StandingsTable({ rows }: { rows: StandingRow[] }) {
               <th scope="col" className="hidden px-2 sm:table-cell" title="Drawn">D</th>
               <th scope="col" className="hidden px-2 sm:table-cell" title="Lost">L</th>
               <th scope="col" className="px-2" title="Goal difference">GD</th>
-              <th scope="col" className="px-2 text-right" title="Points">Pts</th>
-              <th scope="col" className="hidden pr-3 text-left md:table-cell" title="Last 5 results">Form</th>
+              <th scope="col" className="hidden px-4 text-left md:table-cell" title="Last 5 results, oldest to most recent">Form</th>
+              <th scope="col" className="py-2 pl-2 pr-3 text-right" title="Points">Pts</th>
             </tr>
           </thead>
           <tbody>
@@ -46,10 +46,10 @@ export default function StandingsTable({ rows }: { rows: StandingRow[] }) {
                   <td className="hidden px-2 text-center font-mono sm:table-cell">{r.all.draw}</td>
                   <td className="hidden px-2 text-center font-mono sm:table-cell">{r.all.lose}</td>
                   <td className="px-2 text-center font-mono">{r.goalsDiff > 0 ? `+${r.goalsDiff}` : r.goalsDiff}</td>
-                  <td className="px-2 text-right font-mono font-bold">{r.points}</td>
-                  <td className="hidden pr-3 md:table-cell">
+                  <td className="hidden px-4 md:table-cell">
                     <FormDots form={r.form} />
                   </td>
+                  <td className="py-2 pl-2 pr-3 text-right font-mono font-bold">{r.points}</td>
                 </tr>
               )
             })}

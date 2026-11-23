@@ -23,7 +23,7 @@ function LeagueView({ leagueId }: { leagueId: number }) {
   const league = LEAGUES.find((l) => l.id === leagueId)
 
   return (
-    <main className="mx-auto max-w-2xl space-y-5 p-4">
+    <main className="mx-auto max-w-3xl space-y-5 p-4">
       <SiteHeader />
       <LeagueSwitcher activeId={leagueId} />
 

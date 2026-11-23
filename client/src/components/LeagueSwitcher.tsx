@@ -25,18 +25,18 @@ export default function LeagueSwitcher({ activeId }: { activeId: number }) {
         ref={scrollRef}
         onScroll={update}
         aria-label="Choose league"
-        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0"
+        className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0"
       >
         {LEAGUES.map((l) => (
           <Link
             key={l.id}
             to={`/league/${l.id}`}
             aria-current={l.id === activeId ? 'page' : undefined}
-            className={`flex shrink-0 items-center gap-2 rounded-full px-3 py-1.5 text-sm font-medium transition ${
+            className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition md:text-[13px] ${
               l.id === activeId ? 'bg-pitch text-base' : 'bg-surface text-slate-300 hover:bg-slate-800'
             }`}
           >
-            <img src={leagueLogo(l.id)} alt="" className="h-5 w-5 rounded-sm bg-white/90 object-contain p-px" />
+            <img src={leagueLogo(l.id)} alt="" className="h-4 w-4 rounded-sm bg-white/90 object-contain p-px" />
             {l.name}
           </Link>
         ))}
