@@ -5,12 +5,13 @@ const DOT: Record<string, { className: string; label: string }> = {
 }
 
 /**
- * Last results as small coloured dots, in the API's order:
- * oldest on the left, most recent on the right (e.g. "WWDLW").
+ * Last results as small coloured dots.
+ * API-Football sends the form string MOST RECENT FIRST (e.g. "DLDLW" = latest result is D),
+ * so we reverse it: oldest on the left, most recent on the right.
  */
 export default function FormDots({ form }: { form: string | null }) {
   if (!form) return <span className="text-slate-600">–</span>
-  const results = [...form].filter((c) => c in DOT)
+  const results = [...form].reverse().filter((c) => c in DOT)
   const summary = results.map((c) => DOT[c].label.toLowerCase()).join(', ')
 
   return (
