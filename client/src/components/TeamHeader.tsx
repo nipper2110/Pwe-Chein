@@ -5,7 +5,7 @@ function Fact({ label, value }: { label: string; value: string | number | null }
   if (value === null || value === '') return null
   return (
     <div>
-      <dt className="text-[10px] uppercase text-slate-500">{label}</dt>
+      <dt className="text-[10px] uppercase text-slate-400">{label}</dt>
       <dd className="text-sm">{value}</dd>
     </div>
   )

@@ -1,0 +1,6 @@
+# Public pages can be indexed. Private pages (accounts, dashboard) should not be.
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /login
+Disallow: /register

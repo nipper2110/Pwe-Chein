@@ -23,7 +23,7 @@ export default function DatePicker({ value, now, onChange }: Props) {
           onClick={() => onChange(o.date)}
           aria-pressed={value === o.date}
           className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-            value === o.date ? 'bg-pitch text-base' : 'bg-surface text-slate-300 hover:bg-slate-800'
+            value === o.date ? 'bg-pitch text-on-pitch' : 'bg-surface text-slate-300 hover:bg-slate-800'
           }`}
         >
           {o.label}

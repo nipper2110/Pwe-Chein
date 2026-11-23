@@ -43,7 +43,7 @@ export default function EventRow({ event, isHome }: { event: MatchEvent; isHome:
   return (
     <li className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-t border-slate-800 px-3 py-2 first:border-t-0">
       <div className="flex justify-end">{isHome && content}</div>
-      <span className={`w-12 text-center font-mono text-xs ${event.type === 'Goal' ? 'font-bold text-live' : 'text-slate-400'}`}>
+      <span className={`w-12 text-center font-mono text-xs ${event.type === 'Goal' ? 'font-bold text-live-text' : 'text-slate-400'}`}>
         {minute(event)}
       </span>
       <div>{!isHome && content}</div>

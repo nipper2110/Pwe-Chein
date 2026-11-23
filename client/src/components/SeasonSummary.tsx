@@ -11,9 +11,11 @@ interface TileProps {
 function Tile({ label, value, hint, valueClass = '' }: TileProps) {
   return (
     <div className="rounded-lg bg-slate-900/60 px-3 py-2">
-      <dt className="text-[10px] uppercase text-slate-500">{label}</dt>
-      <dd className={`font-mono text-xl font-bold ${valueClass}`}>{value}</dd>
-      {hint && <p className="text-[10px] text-slate-500">{hint}</p>}
+      <dt className="text-[10px] uppercase text-slate-400">{label}</dt>
+      <dd>
+        <span className={`block font-mono text-xl font-bold ${valueClass}`}>{value}</span>
+        {hint && <span className="block text-[10px] text-slate-400">{hint}</span>}
+      </dd>
     </div>
   )
 }

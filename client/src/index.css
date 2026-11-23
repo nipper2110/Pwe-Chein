@@ -1,20 +1,55 @@
 @import "tailwindcss";
 
-/* "Stadium Night" dark theme */
+/* "Stadium Night" dark theme (the default) */
 @theme {
   --color-pitch: #10b981; /* main green */
-  --color-live: #ef4444; /* LIVE badge, goals only */
+  --color-live: #dc2626; /* LIVE badge background (a shade darker than #ef4444 so white text passes contrast) */
+  --color-live-text: #f87171; /* red for live scores/goal minutes on dark backgrounds */
   --color-surface: #0f172a; /* cards */
   --color-base: #020617; /* background */
+  --color-on-pitch: #022c22; /* text on green buttons */
+  --color-chip: rgb(255 255 255 / 0.9); /* white chip behind league logos, so dark logos stay visible */
 
   --font-sans: "Inter", "Noto Sans Myanmar", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-burmese: "Noto Sans Myanmar", sans-serif;
 }
 
+:root {
+  color-scheme: dark; /* makes scrollbars and form controls dark too */
+}
+
+/*
+ * Light theme. Instead of rewriting every component, we change the colour variables themselves:
+ * the slate scale is flipped (dark text becomes light and the other way round), and the brand
+ * colours get darker shades that keep enough contrast on white.
+ */
+[data-theme="light"] {
+  color-scheme: light;
+  --color-base: #f1f5f9;
+  --color-surface: #ffffff;
+  --color-pitch: #065f46;
+  --color-on-pitch: #ffffff;
+  --color-live: #dc2626;
+  --color-live-text: #dc2626;
+  --color-amber-500: #b45309;
+  --color-white: #0f172a; /* "text-white" is our emphasis colour, so it becomes dark */
+  --color-slate-50: #020617;
+  --color-slate-100: #0f172a;
+  --color-slate-200: #1e293b;
+  --color-slate-300: #334155;
+  --color-slate-400: #475569;
+  --color-slate-500: #64748b;
+  --color-slate-600: #94a3b8;
+  --color-slate-700: #cbd5e1;
+  --color-slate-800: #e2e8f0;
+  --color-slate-900: #f1f5f9;
+  --color-slate-950: #f8fafc;
+}
+
 body {
   background-color: var(--color-base);
-  color: #e2e8f0;
+  color: var(--color-slate-200);
   font-family: var(--font-sans);
 }
 
@@ -25,4 +60,15 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-pitch);
   outline-offset: 2px;
+}
+/* <main> gets focus after page changes (for screen readers); it should not show a ring. */
+[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Respect "reduce motion" settings: no pulsing. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse {
+    animation: none;
+  }
 }

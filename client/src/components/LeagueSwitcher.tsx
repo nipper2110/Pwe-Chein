@@ -34,7 +34,7 @@ export default function LeagueSwitcher({ activeId }: { activeId: number }) {
             to={`/league/${l.id}`}
             aria-current={l.id === activeId ? 'page' : undefined}
             className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition md:text-[13px] ${
-              l.id === activeId ? 'bg-pitch text-base' : 'bg-surface text-slate-300 hover:bg-slate-800'
+              l.id === activeId ? 'bg-pitch text-on-pitch' : 'bg-surface text-slate-300 hover:bg-slate-800'
             }`}
           >
             <LeagueLogo src={leagueLogo(l.id)} size="sm" />

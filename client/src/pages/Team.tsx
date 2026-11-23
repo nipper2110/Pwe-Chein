@@ -5,19 +5,21 @@ import FormDots from '../components/FormDots'
 import LeagueSection from '../components/LeagueSection'
 import SeasonBadge from '../components/SeasonBadge'
 import SeasonSummary from '../components/SeasonSummary'
-import SiteHeader from '../components/SiteHeader'
+import PageLayout from '../components/PageLayout'
 import TableSkeleton from '../components/TableSkeleton'
 import TeamHeader from '../components/TeamHeader'
 import { useTeam } from '../hooks/useTeam'
+import { usePageMeta } from '../hooks/usePageMeta'
+import { ApiError } from '../api/http'
+import NotFoundState from '../components/NotFoundState'
 import { resultFor } from '../utils/results'
 
 function TeamShell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto max-w-3xl space-y-5 p-4">
-      <SiteHeader />
+    <PageLayout>
       <Link to="/league" className="inline-block text-sm text-slate-400 hover:text-slate-200">← Leagues</Link>
       {children}
-    </main>
+    </PageLayout>
   )
 }
 
@@ -32,16 +34,26 @@ export default function Team() {
 
 function TeamView({ teamId }: { teamId: number }) {
   const team = useTeam(teamId)
+  const data = team.data
+  const notFound = team.error instanceof ApiError && team.error.status === 404
+  usePageMeta({
+    title: data ? data.team.name : notFound ? 'Team not found' : 'Team',
+    description: data
+      ? `${data.team.name}: season summary, recent results and stats for the ${data.season}/${String(data.season + 1).slice(-2)} season.`
+      : undefined,
+    noindex: !data,
+  })
 
   return (
     <TeamShell>
       {team.isPending && <TableSkeleton rows={8} />}
-      {team.isError && <ErrorState message={team.error.message} onRetry={() => void team.refetch()} />}
+      {notFound && <NotFoundState title="Team not found" message="That team doesn't exist." />}
+      {team.isError && !notFound && <ErrorState message={team.error.message} onRetry={() => void team.refetch()} />}
       {team.isSuccess && (
         <>
           <TeamHeader data={team.data} />
 
-          <p className="flex items-center gap-2 text-xs text-slate-500">
+          <p className="flex items-center gap-2 text-xs text-slate-400">
             <SeasonBadge /> Results and stats come from this season (free API plan limit).
           </p>
 

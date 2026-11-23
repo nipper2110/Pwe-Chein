@@ -4,11 +4,12 @@ import ErrorState from '../components/ErrorState'
 import LeagueLogo from '../components/LeagueLogo'
 import LeagueSwitcher from '../components/LeagueSwitcher'
 import SeasonBadge from '../components/SeasonBadge'
-import SiteHeader from '../components/SiteHeader'
+import PageLayout from '../components/PageLayout'
 import StandingsTable from '../components/StandingsTable'
 import TableSkeleton from '../components/TableSkeleton'
 import TopScorersList from '../components/TopScorersList'
 import { useStandings, useTopScorers } from '../hooks/useLeague'
+import { usePageMeta } from '../hooks/usePageMeta'
 import { LEAGUES, isSupportedLeague, leagueLogo } from '../utils/leagues'
 
 export default function League() {
@@ -22,10 +23,13 @@ function LeagueView({ leagueId }: { leagueId: number }) {
   const standings = useStandings(leagueId)
   const scorers = useTopScorers(leagueId)
   const league = LEAGUES.find((l) => l.id === leagueId)
+  usePageMeta({
+    title: `${league?.name} Standings & Top Scorers`,
+    description: `${league?.name} table with form and zones, plus the top scorers.`,
+  })
 
   return (
-    <main className="mx-auto max-w-3xl space-y-5 p-4">
-      <SiteHeader />
+    <PageLayout>
       <LeagueSwitcher activeId={leagueId} />
 
       <div className="flex items-center gap-3">
@@ -55,6 +59,6 @@ function LeagueView({ leagueId }: { leagueId: number }) {
         {scorers.isSuccess && scorers.data.length === 0 && <EmptyState text="No scorers available yet." />}
         {scorers.isSuccess && scorers.data.length > 0 && <TopScorersList scorers={scorers.data} />}
       </section>
-    </main>
+    </PageLayout>
   )
 }

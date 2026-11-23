@@ -4,10 +4,13 @@ import EventsTimeline from '../components/EventsTimeline'
 import LineupsView from '../components/LineupsView'
 import MatchHeader from '../components/MatchHeader'
 import MatchTabs, { type MatchTab } from '../components/MatchTabs'
-import SiteHeader from '../components/SiteHeader'
+import PageLayout from '../components/PageLayout'
 import StatisticsBars from '../components/StatisticsBars'
 import TableSkeleton from '../components/TableSkeleton'
 import { useMatch } from '../hooks/useMatch'
+import { usePageMeta } from '../hooks/usePageMeta'
+import { ApiError } from '../api/http'
+import NotFoundState from '../components/NotFoundState'
 
 export default function Match() {
   const { id } = useParams()
@@ -18,16 +21,24 @@ export default function Match() {
 
 function MatchShell({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto max-w-3xl space-y-5 p-4">
-      <SiteHeader />
+    <PageLayout>
       <Link to="/" className="inline-block text-sm text-slate-400 hover:text-slate-200">← All matches</Link>
       {children}
-    </main>
+    </PageLayout>
   )
 }
 
 function MatchView({ matchId }: { matchId: number }) {
   const match = useMatch(matchId)
+  const data = match.data
+  const notFound = match.error instanceof ApiError && match.error.status === 404
+  usePageMeta({
+    title: data ? `${data.teams.home.name} vs ${data.teams.away.name}` : notFound ? 'Match not found' : 'Match',
+    description: data
+      ? `${data.teams.home.name} vs ${data.teams.away.name} (${data.league.name}): score, events, lineups and statistics.`
+      : undefined,
+    noindex: !data,
+  })
   // The active tab lives in the URL (?tab=lineups), so each tab is linkable.
   const [params, setParams] = useSearchParams()
   const tab: MatchTab = params.get('tab') === 'lineups' ? 'lineups' : params.get('tab') === 'stats' ? 'stats' : 'events'
@@ -36,7 +47,8 @@ function MatchView({ matchId }: { matchId: number }) {
   return (
     <MatchShell>
       {match.isPending && <TableSkeleton rows={8} />}
-      {match.isError && <ErrorState message={match.error.message} onRetry={() => void match.refetch()} />}
+      {notFound && <NotFoundState title="Match not found" message="That match doesn't exist or isn't in one of our leagues." />}
+      {match.isError && !notFound && <ErrorState message={match.error.message} onRetry={() => void match.refetch()} />}
       {match.isSuccess && (
         <>
           <MatchHeader match={match.data} />

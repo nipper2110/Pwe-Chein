@@ -14,7 +14,7 @@ interface TeamNameProps {
 }
 
 function TeamName({ team, align, role }: TeamNameProps) {
-  const nameClass = role === 'own' ? 'text-slate-500' : role === 'opponent' ? 'font-bold text-white' : ''
+  const nameClass = role === 'own' ? 'text-slate-400' : role === 'opponent' ? 'font-bold text-white' : ''
   return (
     <div className={`flex flex-1 items-center gap-2 ${align === 'right' ? 'flex-row-reverse text-right' : ''}`}>
       <img src={team.logo} alt="" loading="lazy" className="h-6 w-6 shrink-0 object-contain" />
@@ -67,20 +67,20 @@ export default function MatchCard({ match, showDate = false, resultForTeamId, sh
 
         <div className={`flex shrink-0 flex-col items-center gap-1 ${showDate ? 'w-24' : 'w-20'}`}>
           {showDate && (
-            <span className="whitespace-nowrap text-[10px] text-slate-500">
+            <span className="whitespace-nowrap text-[10px] text-slate-400">
               {new Date(match.fixture.date).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
           )}
           {isNotStarted(match) ? (
             <span className="font-mono text-sm text-slate-300">{formatKickoff(match.fixture.date)}</span>
           ) : (
-            <span className={`font-mono text-lg font-bold ${live ? 'text-live' : ''}`}>
+            <span className={`font-mono text-lg font-bold ${live ? 'text-live-text' : ''}`}>
               {match.goals.home ?? 0} - {match.goals.away ?? 0}
             </span>
           )}
           {live && <LiveBadge minute={status.elapsed} />}
           {!live && !isNotStarted(match) && (
-            <span className="text-[10px] uppercase text-slate-500">{isFinished(match) ? 'FT' : status.long}</span>
+            <span className="text-[10px] uppercase text-slate-400">{isFinished(match) ? 'FT' : status.long}</span>
           )}
           {style && <span className="sr-only">{style.label}</span>}
         </div>

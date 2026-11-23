@@ -13,6 +13,9 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
 
   return (
     <section className="rounded-xl bg-surface p-4 text-center">
+      <h1 className="sr-only">
+        {home.name} vs {away.name}
+      </h1>
       <Link to={`/league/${match.league.id}`} className="mb-4 inline-flex items-center gap-2 text-xs text-slate-400 hover:text-slate-200">
         <LeagueLogo src={match.league.logo} size="sm" />
         {match.league.name} · {match.league.round}
@@ -28,7 +31,7 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
           {isNotStarted(match) ? (
             <span className="whitespace-nowrap font-mono text-xl font-bold">{formatKickoff(match.fixture.date)}</span>
           ) : (
-            <span className={`font-mono text-3xl font-bold ${live ? 'text-live' : ''}`}>
+            <span className={`font-mono text-3xl font-bold ${live ? 'text-live-text' : ''}`}>
               {match.goals.home ?? 0} - {match.goals.away ?? 0}
             </span>
           )}
@@ -42,7 +45,7 @@ export default function MatchHeader({ match }: { match: MatchDetail }) {
         </Link>
       </div>
 
-      <p className="mt-4 text-xs text-slate-500">
+      <p className="mt-4 text-xs text-slate-400">
         {date.toLocaleDateString([], { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}
         {venue.name ? ` · ${venue.name}${venue.city ? `, ${venue.city}` : ''}` : ''}
         {match.fixture.referee ? ` · Referee: ${match.fixture.referee}` : ''}

@@ -5,9 +5,10 @@ import ErrorState from '../components/ErrorState'
 import LeagueSection from '../components/LeagueSection'
 import MatchListSkeleton from '../components/MatchListSkeleton'
 import SeasonBadge from '../components/SeasonBadge'
-import SiteHeader from '../components/SiteHeader'
+import PageLayout from '../components/PageLayout'
 import { useFixtures, useLiveFixtures } from '../hooks/useFixtures'
 import { useNow } from '../hooks/useNow'
+import { usePageMeta } from '../hooks/usePageMeta'
 import type { Fixture } from '../types/fixture'
 import { toISODate } from '../utils/dates'
 import { mayBeLiveSoon } from '../utils/fixtureStatus'
@@ -28,6 +29,11 @@ function groupByLeague(fixtures: Fixture[]): { league: Fixture['league']; matche
 }
 
 export default function Home() {
+  usePageMeta({
+    title: "Today's Football Fixtures & Live Scores",
+    description:
+      'Live scores and fixtures for the Premier League, La Liga, Serie A, Bundesliga, Ligue 1 and Champions League, grouped by league in your time zone.',
+  })
   const [date, setDate] = useState(() => toISODate(new Date()))
   const now = useNow(60_000)
   const isToday = date === toISODate(new Date(now))
@@ -45,9 +51,9 @@ export default function Home() {
   }, [day.data, liveMatches])
 
   return (
-    <main className="mx-auto max-w-3xl space-y-5 p-4">
-      <SiteHeader />
-      <p className="flex items-center gap-2 text-xs text-slate-500">
+    <PageLayout>
+      <h1 className="sr-only">Live football scores and fixtures</h1>
+      <p className="flex items-center gap-2 text-xs text-slate-400">
         <SeasonBadge /> Standings and top scorers use this season (free API plan limit).
       </p>
 
@@ -67,6 +73,6 @@ export default function Home() {
           ))}
         </>
       )}
-    </main>
+    </PageLayout>
   )
 }

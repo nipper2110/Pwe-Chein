@@ -6,7 +6,6 @@ export function useMatch(id: number) {
   return useQuery({
     queryKey: ['match', id],
     queryFn: () => fetchMatch(id),
-    retry: 1,
     staleTime: 60_000,
     // Refresh every 60s only while this match is actually live (protects our request quota).
     refetchInterval: (query) => (query.state.data && isLive(query.state.data) ? 60_000 : false),

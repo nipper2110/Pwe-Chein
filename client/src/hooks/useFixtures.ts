@@ -16,12 +16,15 @@ export function useFixtures(date: string) {
 /**
  * Polls live scores every 60s, but only while it matters:
  * - `soon`: a match is live or about to kick off, or
- * - the last answer still contained live matches.
+ * - the last answer still contained a live match that `relevant` accepts.
  * This protects our 100 requests/day.
+ *
+ * The Home page and the Dashboard both use this hook with the SAME query key, so they share one
+ * request and one cache entry. `relevant` lets the Dashboard care only about followed teams.
  */
-export function useLiveFixtures(soon: boolean) {
+export function useLiveFixtures(soon: boolean, relevant: (match: Fixture) => boolean = () => true) {
   const queryClient = useQueryClient()
-  const hasLive = (queryClient.getQueryData<Fixture[]>(LIVE_KEY)?.length ?? 0) > 0
+  const hasLive = (queryClient.getQueryData<Fixture[]>(LIVE_KEY) ?? []).some(relevant)
 
   return useQuery({
     queryKey: LIVE_KEY,

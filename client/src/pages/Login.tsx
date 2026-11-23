@@ -2,10 +2,12 @@ import { useState, type FormEvent } from 'react'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { ApiError } from '../api/auth'
 import AuthPageShell from '../components/AuthPageShell'
+import { usePageMeta } from '../hooks/usePageMeta'
 import FormField from '../components/FormField'
 import { useLogin, useUser } from '../hooks/useAuth'
 
 export default function Login() {
+  usePageMeta({ title: 'Log in', noindex: true })
   const user = useUser()
   const login = useLogin()
   const from = (useLocation().state as { from?: string } | null)?.from ?? '/dashboard'
@@ -34,7 +36,7 @@ export default function Login() {
         )}
 
         <button type="submit" disabled={login.isPending}
-          className="w-full rounded-full bg-pitch px-4 py-2 text-sm font-semibold text-base disabled:opacity-60">
+          className="w-full rounded-full bg-pitch px-4 py-2 text-sm font-semibold text-on-pitch disabled:opacity-60">
           {login.isPending ? 'Logging in…' : 'Log in'}
         </button>
       </form>

@@ -12,7 +12,7 @@ const toNumber = (v: number | string | null): number => {
 }
 
 const BETTER = 'font-bold text-white'
-const WORSE = 'font-normal text-slate-500'
+const WORSE = 'font-normal text-slate-400'
 const EVEN = 'font-semibold text-slate-300'
 
 /** One statistic: values on both sides and a bar split in proportion to them. */

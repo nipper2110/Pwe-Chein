@@ -39,7 +39,7 @@ export default function FollowButton({ teamId, teamName }: Props) {
         disabled={busy}
         onClick={() => mutation.mutate(teamId)}
         className={`${BASE} disabled:opacity-60 ${
-          following ? 'bg-pitch text-base' : 'bg-slate-800 text-slate-300 hover:text-white'
+          following ? 'bg-pitch text-on-pitch' : 'bg-slate-800 text-slate-300 hover:text-white'
         }`}
       >
         <span aria-hidden="true">{following ? '★' : '☆'}</span>

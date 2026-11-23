@@ -11,5 +11,5 @@ interface Props {
 }
 
 export default function LeagueLogo({ src, size = 'md' }: Props) {
-  return <img src={src} alt="" loading="lazy" className={`shrink-0 bg-white/90 object-contain ${SIZES[size]}`} />
+  return <img src={src} alt="" loading="lazy" className={`shrink-0 bg-chip object-contain ${SIZES[size]}`} />
 }

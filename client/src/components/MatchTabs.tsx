@@ -24,7 +24,7 @@ export default function MatchTabs({ active, onChange }: Props) {
           aria-controls="match-panel"
           onClick={() => onChange(t.id)}
           className={`rounded-full px-4 py-1.5 text-sm font-medium transition ${
-            active === t.id ? 'bg-pitch text-base' : 'bg-surface text-slate-300 hover:bg-slate-800'
+            active === t.id ? 'bg-pitch text-on-pitch' : 'bg-surface text-slate-300 hover:bg-slate-800'
           }`}
         >
           {t.label}
