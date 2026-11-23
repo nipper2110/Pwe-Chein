@@ -7,7 +7,10 @@ const BASE_URL = "https://v3.football.api-sports.io";
 export const TTL = {
   STATIC: 24 * 60 * 60, // leagues, teams, players
   STANDINGS: 6 * 60 * 60, // standings, top scorers
-  FIXTURES: 60 * 60, // fixtures that are not live
+  FIXTURES: 60 * 60, // today's fixtures when nothing is live
+  FIXTURES_PAST: 7 * 24 * 60 * 60, // finished days never change
+  FIXTURES_FUTURE: 6 * 60 * 60, // future days only change if a match is rescheduled
+  FIXTURES_TODAY_LIVE: 5 * 60, // today while a match is being played
   LIVE: 60, // live matches
   FINISHED_MATCH: 7 * 24 * 60 * 60, // lineups, events, statistics of finished matches
 } as const;
@@ -69,7 +72,8 @@ const inFlight = new Map<string, Promise<unknown>>();
 export async function cachedFetch<T>(
   endpoint: string,
   params: Record<string, string | number>,
-  ttlSeconds: number,
+  // A number, or a function that picks the TTL after looking at the fresh data.
+  ttl: number | ((data: T) => number),
 ): Promise<T> {
   const query = new URLSearchParams(
     Object.entries(params)
@@ -94,6 +98,7 @@ export async function cachedFetch<T>(
     console.log(`[api-football] REAL CALL #${usage.realApiCalls} GET ${key} (uses 1 quota)`);
 
     const body = await callApi<T>(endpoint, query ? `?${query}` : "");
+    const ttlSeconds = typeof ttl === "function" ? ttl(body.response) : ttl;
     await CacheEntry.updateOne(
       { key },
       { key, data: body.response, expiresAt: new Date(Date.now() + ttlSeconds * 1000) },
@@ -159,9 +164,27 @@ function onlySupported(fixtures: Fixture[]): Fixture[] {
   return fixtures.filter((f) => f.league.id in SUPPORTED_LEAGUES);
 }
 
-/** All fixtures on a date (YYYY-MM-DD), cached 1 hour. Filtered to our 6 leagues. */
+const LIVE_STATUSES = new Set(["1H", "HT", "2H", "ET", "BT", "P", "LIVE", "INT"]);
+
+/**
+ * How long to cache a day's fixtures, based on the date:
+ * - past day: 7 days (finished, never changes)
+ * - future day: 6 hours
+ * - today: 5 minutes if one of our matches is live, otherwise 1 hour
+ * Dates are compared in UTC, because API-Football's default timezone is UTC.
+ */
+export function fixturesTtl(date: string, fixtures: Fixture[], now: Date = new Date()): number {
+  const today = now.toISOString().slice(0, 10);
+  if (date < today) return TTL.FIXTURES_PAST;
+  if (date > today) return TTL.FIXTURES_FUTURE;
+  const anyLive = onlySupported(fixtures).some((f) => LIVE_STATUSES.has(f.fixture.status.short));
+  return anyLive ? TTL.FIXTURES_TODAY_LIVE : TTL.FIXTURES;
+}
+
+/** All fixtures on a date (YYYY-MM-DD). Cache time depends on the date. Filtered to our 6 leagues. */
 export async function getFixturesByDate(date: string): Promise<Fixture[]> {
-  return onlySupported(await cachedFetch<Fixture[]>("/fixtures", { date }, TTL.FIXTURES));
+  const all = await cachedFetch<Fixture[]>("/fixtures", { date }, (data) => fixturesTtl(date, data));
+  return onlySupported(all);
 }
 
 /** Matches being played right now in our 6 leagues, cached only 60 seconds. */
