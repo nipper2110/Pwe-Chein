@@ -370,6 +370,13 @@ async function getTeamSummary(teamId: number, leagueId: number): Promise<TeamSum
   };
 }
 
+// Competitions that are not competitive matches. The API's fixture data has no "type" field,
+// so we go by name. Real examples: "Friendlies Clubs", "Premier League - Summer Series".
+// The Community Shield is a real trophy match, so it is NOT excluded.
+const NON_COMPETITIVE = /friendl|summer series|pre-?season|testimonial/i;
+
+export const isCompetitive = (f: Fixture): boolean => !NON_COMPETITIVE.test(f.league.name);
+
 /**
  * Team info + recent results + next fixtures.
  * Free plan: "last" and "next" are blocked, and only seasons 2022-2024 are allowed.
@@ -380,7 +387,10 @@ export async function getTeam(teamId: number): Promise<TeamPage | null> {
   const info = (await cachedFetch<TeamInfo[]>("/teams", { id: teamId }, TTL.STATIC))[0];
   if (!info) return null;
 
-  const season = await cachedFetch<Fixture[]>("/fixtures", { team: teamId, season: config.SEASON }, TTL.STATIC);
+  // Friendlies and pre-season tours are removed here, after the cache, so no extra API request is needed.
+  const season = (await cachedFetch<Fixture[]>("/fixtures", { team: teamId, season: config.SEASON }, TTL.STATIC)).filter(
+    isCompetitive,
+  );
   const byDate = (a: Fixture, b: Fixture): number => a.fixture.date.localeCompare(b.fixture.date);
 
   // The summary is a bonus: if it fails, the rest of the page should still load.

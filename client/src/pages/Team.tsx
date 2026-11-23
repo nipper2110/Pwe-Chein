@@ -56,7 +56,7 @@ function TeamView({ teamId }: { teamId: number }) {
             {team.data.recent.length === 0 ? (
               <EmptyState text="No results found for this season." />
             ) : (
-              <LeagueSection title="Last 5 matches" matches={team.data.recent} showDate resultForTeamId={teamId} />
+              <LeagueSection title="Last 5 matches" matches={team.data.recent} showDate showCompetition resultForTeamId={teamId} />
             )}
           </section>
 
@@ -64,7 +64,7 @@ function TeamView({ teamId }: { teamId: number }) {
           {team.data.upcoming.length > 0 && (
             <section aria-labelledby="next-title" className="space-y-2">
               <h2 id="next-title" className="font-semibold">Next fixtures</h2>
-              <LeagueSection title="Upcoming" matches={team.data.upcoming} showDate />
+              <LeagueSection title="Upcoming" matches={team.data.upcoming} showDate showCompetition />
             </section>
           )}
         </>

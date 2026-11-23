@@ -7,10 +7,11 @@ interface Props {
   logo?: string
   matches: Fixture[]
   showDate?: boolean
+  showCompetition?: boolean
   resultForTeamId?: number
 }
 
-export default function LeagueSection({ title, logo, matches, showDate, resultForTeamId }: Props) {
+export default function LeagueSection({ title, logo, matches, showDate, showCompetition, resultForTeamId }: Props) {
   return (
     <section className="overflow-hidden rounded-xl bg-surface">
       <h2 className="flex items-center gap-2 px-4 py-3 text-sm font-semibold">
@@ -18,7 +19,13 @@ export default function LeagueSection({ title, logo, matches, showDate, resultFo
         {title}
       </h2>
       {matches.map((m) => (
-        <MatchCard key={m.fixture.id} match={m} showDate={showDate} resultForTeamId={resultForTeamId} />
+        <MatchCard
+          key={m.fixture.id}
+          match={m}
+          showDate={showDate}
+          showCompetition={showCompetition}
+          resultForTeamId={resultForTeamId}
+        />
       ))}
     </section>
   )
