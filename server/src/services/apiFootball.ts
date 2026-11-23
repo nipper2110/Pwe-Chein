@@ -233,3 +233,62 @@ export async function getStandings(leagueId: number): Promise<StandingRow[][]> {
 export function getTopScorers(leagueId: number): Promise<TopScorer[]> {
   return cachedFetch<TopScorer[]>("/players/topscorers", { league: leagueId, season: config.SEASON }, TTL.STANDINGS);
 }
+
+// ---------- Match details (Phase 5) ----------
+
+export interface MatchEvent {
+  time: { elapsed: number; extra: number | null };
+  team: { id: number; name: string; logo: string };
+  player: { id: number | null; name: string | null };
+  // For substitutions: `player` is the player going OFF and `assist` is the player coming ON.
+  assist: { id: number | null; name: string | null };
+  type: string; // "Goal" | "Card" | "subst" | "Var"
+  detail: string;
+}
+
+export interface LineupPlayer {
+  player: { id: number; name: string; number: number | null; pos: string | null };
+}
+
+export interface Lineup {
+  team: { id: number; name: string; logo: string };
+  coach: { id: number | null; name: string | null };
+  formation: string | null;
+  startXI: LineupPlayer[];
+  substitutes: LineupPlayer[];
+}
+
+export interface TeamStatistics {
+  team: { id: number; name: string; logo: string };
+  statistics: { type: string; value: number | string | null }[];
+}
+
+export interface MatchDetail extends Fixture {
+  fixture: Fixture["fixture"] & { venue: { name: string | null; city: string | null }; referee: string | null };
+  league: Fixture["league"] & { round: string };
+  events: MatchEvent[];
+  lineups: Lineup[];
+  statistics: TeamStatistics[];
+}
+
+const FINISHED_STATUSES = new Set(["FT", "AET", "PEN"]);
+
+/** Finished matches never change (7 days). Live: 60s. Anything else (not started etc.): 1 hour. */
+function matchTtl(data: MatchDetail[]): number {
+  const status = data[0]?.fixture.status.short;
+  if (!status) return 5 * 60; // unknown id: remember "not found" only briefly
+  if (FINISHED_STATUSES.has(status)) return TTL.FINISHED_MATCH;
+  if (LIVE_STATUSES.has(status)) return TTL.LIVE;
+  return TTL.FIXTURES;
+}
+
+/**
+ * One match with its events, lineups and statistics. A single API request returns all of them.
+ * Returns null if the match does not exist or is not in one of our 6 leagues.
+ */
+export async function getMatch(fixtureId: number): Promise<MatchDetail | null> {
+  const data = await cachedFetch<MatchDetail[]>("/fixtures", { id: fixtureId }, matchTtl);
+  const match = data[0];
+  if (!match || !(match.league.id in SUPPORTED_LEAGUES)) return null;
+  return match;
+}

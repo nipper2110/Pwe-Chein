@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Fixture, Team } from '../types/fixture'
 import { formatKickoff } from '../utils/dates'
 import { isFinished, isLive, isNotStarted } from '../utils/fixtureStatus'
@@ -17,7 +18,10 @@ export default function MatchCard({ match }: { match: Fixture }) {
   const live = isLive(match)
 
   return (
-    <div className="flex items-center gap-3 border-t border-slate-800 px-4 py-3 first:border-t-0">
+    <Link
+      to={`/match/${match.fixture.id}`}
+      className="flex items-center gap-3 border-t border-slate-800 px-4 py-3 transition first:border-t-0 hover:bg-slate-800/60"
+    >
       <TeamName team={match.teams.home} align="left" />
 
       <div className="flex w-20 shrink-0 flex-col items-center gap-1">
@@ -35,6 +39,6 @@ export default function MatchCard({ match }: { match: Fixture }) {
       </div>
 
       <TeamName team={match.teams.away} align="right" />
-    </div>
+    </Link>
   )
 }
