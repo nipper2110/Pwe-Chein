@@ -301,12 +301,12 @@
   "legal": {
     "lastUpdated": "Last updated: November 24, 2026",
     "contactTitle": "Contact",
-    "contactText": "Pwechein is operated by an individual, Chan Nyein Moe. Questions, or requests to delete your data, can be sent to:"
+    "contactText": "Questions, or requests to delete your data, can be sent to:"
   },
   "privacy": {
     "title": "Privacy Policy",
     "metaDescription": "What data Pwechein keeps, why, and how you can have it deleted.",
-    "intro": "Pwechein (ပွဲချိန်) is a free football scores and fixtures service, operated by an individual, Chan Nyein Moe. This page explains what data the site keeps about you and why. It is written to match what the code actually does.",
+    "intro": "Pwechein (ပွဲချိန်) is a free football scores and fixtures service. This page explains what data the site keeps about you and why. It is written to match what the code actually does.",
     "collect": {
       "title": "What we collect",
       "intro": "We only keep what is needed for accounts and for following teams:",
@@ -346,7 +346,7 @@
     "intro": "By using Pwechein (ပွဲချိန်) you agree to these terms. They are short.",
     "about": {
       "title": "About the service",
-      "body": "Pwechein is a free football scores and fixtures service, operated by an individual, Chan Nyein Moe. It is provided \"as is\" and \"as available\", without any warranty. We do not promise that it will always work, be available without interruption or be free of errors."
+      "body": "Pwechein is a free football scores and fixtures service. It is provided \"as is\" and \"as available\", without any warranty. We do not promise that it will always work, be available without interruption or be free of errors."
     },
     "data": {
       "title": "Match data",

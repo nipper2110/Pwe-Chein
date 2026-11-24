@@ -98,6 +98,11 @@ an unverified Google email is refused for both linking and creating accounts (on
   Stronger fix if it ever matters: put a Vercel Edge Middleware or a Cloudflare worker in front that adds a secret header, and make the server require it.
 - The per-account login limit also lets a stranger lock your account for an hour by failing 15 times. Accepted trade-off.
 
+## Later
+
+- [ ] Add a recovery email and turn on 2-Step Verification for pwechein@gmail.com
+- [ ] Add pwechein@gmail.com as an Owner in Google Cloud and set it as the OAuth "User support email"
+
 ## Ideas for later
 
 - [ ] Rate-limit counters live in server memory (reset on restart or when Render's free instance sleeps). If we ever run more than one instance, use a shared store.

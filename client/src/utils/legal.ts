@@ -1,2 +1,2 @@
 /** Where privacy questions and account-deletion requests go. */
-export const CONTACT_EMAIL = 'channyeinmoe2121@gmail.com'
+export const CONTACT_EMAIL = 'pwechein@gmail.com'
