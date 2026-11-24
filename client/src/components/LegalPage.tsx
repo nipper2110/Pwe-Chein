@@ -43,7 +43,7 @@ export default function LegalPage({ title, intro, sections }: Props) {
         <h2 className="text-lg font-semibold">{t('legal.contactTitle')}</h2>
         <p className="leading-relaxed text-slate-300">
           {t('legal.contactText')}{' '}
-          <a href={`mailto:${CONTACT_EMAIL}`} className="break-all text-pitch underline underline-offset-2 hover:no-underline">{CONTACT_EMAIL}</a>
+          <a href={`mailto:${CONTACT_EMAIL}`} className="whitespace-nowrap text-pitch underline underline-offset-2 hover:no-underline">{CONTACT_EMAIL}</a>
         </p>
       </section>
     </PageLayout>
