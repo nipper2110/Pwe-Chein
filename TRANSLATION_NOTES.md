@@ -114,7 +114,7 @@ These are legal-style texts written by an AI. Please have a native speaker read 
 | `footer.privacy` / `footer.terms` | Short forms (ကိုယ်ရေးကိုယ်တာ / စည်းမျဉ်းများ, ความเป็นส่วนตัว / ข้อกำหนด) so the footer fits on a phone. |
 | `auth.agree` | One sentence with two links inside it; the word order of the links differs per language. |
 
-**Change: from "portfolio project" to a public service (Nov 2026), then no personal name.** The pages call Pwechein "a free football scores and fixtures service" and the operator is only "Pwechein" or "we". There is no personal name and no "operated by an individual" any more. Changed keys (same in en, my, th): `privacy.intro`, `terms.metaDescription`, `terms.about.body`, `terms.changes.body`, `privacy.deletion.body` ("ask me" became "ask us"), `legal.contactText`. The contact address (pwechein@gmail.com) is **not** in the translation files: it is one constant in `client/src/utils/legal.ts`. Burmese uses `ကျွန်ုပ်တို့` for "we" and `သင်` / `သင့်` for "you" in these pages. Things to check:
+**Change: from "portfolio project" to a public service (Nov 2026), then no personal name.** The pages call Pwechein "a free football scores and fixtures service" and the operator is only "Pwechein" or "we". No personal name or operator description appears in the texts any more. Changed keys (same in en, my, th): `privacy.intro`, `terms.metaDescription`, `terms.about.body`, `terms.changes.body`, `privacy.deletion.body` ("ask me" became "ask us"), `legal.contactText`. The contact address (pwechein@gmail.com) is **not** in the translation files: it is one constant in `client/src/utils/legal.ts`. Burmese uses `ကျွန်ုပ်တို့` for "we" and `သင်` / `သင့်` for "you" in these pages. Things to check:
 
 | Key | Why I am unsure |
 |---|---|

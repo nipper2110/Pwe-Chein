@@ -7,7 +7,7 @@ function firstCharacter(word: string): string {
   return [...word][0] ?? ''
 }
 
-/** "Chan Nyein Moe" -> "CM", "Madonna" -> "M", "" -> "?" */
+/** "Aung Kyaw" -> "AK", "Madonna" -> "M", "" -> "?" */
 export function initials(name: string): string {
   const words = name.trim().split(/\s+/).filter(Boolean)
   if (words.length === 0) return '?'

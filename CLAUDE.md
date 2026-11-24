@@ -2,7 +2,7 @@
 
 ## About me
 
-- I am a student building this as a portfolio project. I want to learn, not just copy code.
+- Pwechein is a public football scores and fixtures service. I want to learn, not just copy code.
 - **Always explain what you did and why in Burmese (မြန်မာဘာသာ).** Keep code, comments, commit messages and file names in English.
 - Explain simply. If you use a new concept (e.g. caching, JWT, middleware), explain it in 2–3 simple sentences.
 
