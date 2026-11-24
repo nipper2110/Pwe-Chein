@@ -1,3 +1,5 @@
+import { recordResponse } from './staleStore'
+
 /**
  * An error from our server.
  * - `code` is a stable name such as "INVALID_CREDENTIALS"; the UI turns it into a message in the user's language.
@@ -43,5 +45,7 @@ export async function request<T>(url: string, init: RequestInit = {}): Promise<T
     const { error, code, fields, ...params } = body ?? {}
     throw new ApiError(error ?? `Server responded with HTTP ${res.status}`, res.status, { code, params, fields })
   }
+  // The server marks answers built from saved (expired) data, so the page can say so.
+  if ((init.method ?? 'GET') === 'GET') recordResponse(url, res.headers.get('X-Data-Stale') === 'true')
   return (await res.json()) as T
 }

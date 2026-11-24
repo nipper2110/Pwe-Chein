@@ -26,6 +26,7 @@ export type ErrorCode =
   | "INVALID_BODY"
   | "RATE_LIMITED"
   | "UPSTREAM_ERROR"
+  | "API_UNAVAILABLE"
   | "SERVER_ERROR";
 
 /** Sends `{ error, code, ...extra }`. `extra` carries values the message needs, e.g. { max: 20 }. */
@@ -41,3 +42,9 @@ export function sendError(
 
 /** Thrown when API-Football fails or returns errors. Becomes a 502 instead of a generic 500. */
 export class UpstreamError extends Error {}
+
+/**
+ * Thrown when API-Football cannot be used right now (circuit breaker open, account problem, network failure, HTTP 5xx)
+ * and we have no saved data to show instead. Becomes a 503 with the code API_UNAVAILABLE.
+ */
+export class ApiUnavailableError extends Error {}

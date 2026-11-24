@@ -119,7 +119,7 @@ export async function setLanguage(req: Request, res: Response, next: NextFunctio
   if (!parsed.success) return sendValidationError(res, parsed.error);
 
   try {
-    const user = await User.findByIdAndUpdate(req.userId, { language: parsed.data.language }, { new: true });
+    const user = await User.findByIdAndUpdate(req.userId, { language: parsed.data.language }, { returnDocument: "after" });
     if (!user) {
       res.clearCookie(COOKIE_NAME, cookieOptions);
       sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");

@@ -11,6 +11,10 @@ const envSchema = z.object({
   NODE_ENV: z.string().default("development"),
   // The OAuth client ID from Google Cloud Console. Empty = Google sign-in is switched off (nothing crashes).
   GOOGLE_CLIENT_ID: z.string().trim().default(""),
+  // Circuit breaker: how long to stop calling API-Football after it reports an account/limit problem.
+  // Empty = default. "access" errors (e.g. account suspended) usually last longer, so they get their own value.
+  API_BREAKER_MINUTES: z.preprocess((v) => (v === "" ? undefined : v), z.coerce.number().positive().max(1440).default(15)),
+  API_BREAKER_ACCESS_MINUTES: z.preprocess((v) => (v === "" ? undefined : v), z.coerce.number().positive().max(1440).default(60)),
   // How many proxies sit between the internet and Express. See index.ts. Production default: 2.
   // An empty value (e.g. a blank line copied from .env.example) counts as "not set", not as 0.
   TRUST_PROXY_HOPS: z.preprocess((v) => (v === "" ? undefined : v), z.coerce.number().int().min(0).max(5).optional()),

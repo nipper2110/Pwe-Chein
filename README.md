@@ -66,6 +66,8 @@ Every real API call is logged with its endpoint, and `GET /api/status` shows the
 | Live matches | 60 seconds |
 | Match details (events, lineups, statistics) | 7 days once finished, 60 seconds while live, 1 hour before kick-off |
 
+**When API-Football fails.** A circuit breaker stops all calls for a cooldown (15 minutes, or 60 for "account suspended") after the provider reports an account or limit problem, even inside an HTTP 200 answer. Expired cache entries are kept for 7 days, so the site can show saved data (the response gets the header `X-Data-Stale: true` and the page shows a note) instead of an error. With nothing saved, the API answers `503 API_UNAVAILABLE`. Identical requests that arrive at the same time share one API call.
+
 Rate limits protect the quota and the login: a global limit, a stricter limit on match and team pages, and failed-login limits per IP and per account.
 
 ## Local setup
@@ -99,6 +101,8 @@ Check that it works: open http://localhost:5001/api/health and http://localhost:
 | `SEASON` | Season year to show. The free plan only allows 2022-2024. Default `2024`. |
 | `MONGODB_URI` | MongoDB connection string (required). |
 | `JWT_SECRET` | Long random string (at least 32 characters) that signs login tokens (required). |
+| `API_BREAKER_MINUTES` | Circuit breaker: how long to stop calling API-Football after it reports an account or limit problem (`requests`, `rateLimit`, `token`). Empty = 15. |
+| `API_BREAKER_ACCESS_MINUTES` | Same, for `access` errors such as a suspended account. Empty = 60. |
 | `TRUST_PROXY_HOPS` | How many proxies sit in front of Express. Empty = default (2 in production, 0 locally). |
 | `DEBUG_IP_ENDPOINT` | `true` enables `GET /api/_ip` briefly after deploying, to check the proxy setting. Default `false`. |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID. Empty = Google sign-in is switched off. |

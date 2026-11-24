@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { UpstreamError, sendError } from "../utils/httpError.js";
+import { ApiUnavailableError, UpstreamError, sendError } from "../utils/httpError.js";
 
 // Errors thrown by Express's body parser (e.g. broken JSON) carry a 4xx `status`.
 function clientErrorStatus(err: unknown): number | null {
@@ -21,6 +21,10 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   // The real reason goes to our logs only. Browsers get a generic message, so internal details
   // (database or upstream API errors) are never leaked.
   console.error("[error]", err instanceof Error ? err.message : "Unknown error");
+  if (err instanceof ApiUnavailableError) {
+    sendError(res, 503, "API_UNAVAILABLE", "Match data is temporarily unavailable");
+    return;
+  }
   if (err instanceof UpstreamError) {
     sendError(res, 502, "UPSTREAM_ERROR", "Could not load data from the football data provider");
     return;

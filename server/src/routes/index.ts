@@ -9,11 +9,13 @@ import { teamById } from "../controllers/teamsController.js";
 import { config } from "../config.js";
 import { health, status, whoami } from "../controllers/statusController.js";
 import { requireAuth } from "../middleware/auth.js";
+import { trackStale } from "../middleware/staleTracking.js";
 import { noStore } from "../middleware/noStore.js";
 import { loginAccountLimiter, loginEmailLimiter, loginIpLimiter, quotaLimiter, registerLimiter, strictLimiter } from "../middleware/rateLimit.js";
 
 const router = Router();
 
+router.use(trackStale); // marks answers built from saved (expired) data with X-Data-Stale
 router.use(["/auth", "/favorites"], noStore); // per-user answers: never cached by Vercel or the browser
 
 router.get("/health", health);

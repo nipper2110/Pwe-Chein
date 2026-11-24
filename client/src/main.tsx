@@ -14,6 +14,7 @@ const queryClient = new QueryClient({
     queries: {
       retry: (failureCount, error) => {
         if (error instanceof ApiError && error.status >= 400 && error.status < 500) return false
+        if (error instanceof ApiError && error.code === 'API_UNAVAILABLE') return false // the server already knows it is down
         return failureCount < 2
       },
     },

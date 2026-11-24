@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import BottomTabBar from './BottomTabBar'
+import StaleNotice from './StaleNotice'
 import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
 
@@ -20,6 +21,7 @@ export default function PageLayout({ children, className = 'space-y-5' }: Props)
       <SiteHeader />
       <div className="mx-auto max-w-3xl p-4 pb-24 md:pb-8">
         <main id="main" tabIndex={-1} className={className}>
+          <StaleNotice />
           {children}
         </main>
         <SiteFooter />

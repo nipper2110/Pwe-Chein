@@ -3,7 +3,8 @@
     "tryAgain": "Try again",
     "somethingWrong": "Something went wrong",
     "loading": "Loading",
-    "loadingMatches": "Loading matches"
+    "loadingMatches": "Loading matches",
+    "staleNotice": "Showing saved data. Scores may be out of date."
   },
   "nav": {
     "matches": "Matches",
@@ -280,7 +281,8 @@
     "INVALID_GOOGLE_TOKEN": "Google sign-in failed. Please try again.",
     "GOOGLE_EMAIL_UNVERIFIED": "Google hasn't verified this email address, so we can't use it. Verify it with Google and try again, or sign up with email and password.",
     "GOOGLE_ACCOUNT_CONFLICT": "This email is already linked to a different Google account.",
-    "GOOGLE_NOT_CONFIGURED": "Google sign-in isn't available right now."
+    "GOOGLE_NOT_CONFIGURED": "Google sign-in isn't available right now.",
+    "API_UNAVAILABLE": "Match data is temporarily unavailable. Please check back later."
   },
   "validation": {
     "invalid_email": "Enter a valid email",

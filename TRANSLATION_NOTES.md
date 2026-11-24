@@ -121,6 +121,13 @@ These are legal-style texts written by an AI. Please have a native speaker read 
 | `terms.about.body` | "as is" and "as available" (`ရှိတဲ့အတိုင်း` / `ရနိုင်တဲ့အတိုင်း`, `ตามสภาพ` / `ตามที่มี`) are standard legal phrases that are hard to translate. |
 | Legal status | A public service with real users may need a proper legal review (who is the data controller, GDPR/other local rules). These texts are not legal advice. |
 
+### API unavailable and saved-data note (new)
+
+| Key | Why I am unsure |
+|---|---|
+| `errors.API_UNAVAILABLE` | "Match data is temporarily unavailable. Please check back later." Shown when the football data provider is down and nothing is saved. There is no "Try again" button on purpose. |
+| `common.staleNotice` | "Showing saved data. Scores may be out of date." A small note at the top of a page when the server had to use older saved data. In Burmese I used `သိမ်းထားတဲ့ ဒေတာ` for "saved data". |
+
 ### Both languages
 
 - `season.label` (ရာသီ / ฤดูกาล) and the season note: "free API plan limit" is translated literally.

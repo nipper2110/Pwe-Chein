@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { ApiUnavailableError, sendError } from "../utils/httpError.js";
 import { config } from "../config.js";
 import { getApiStatus, getUsageStats } from "../services/apiFootball.js";
 
@@ -11,6 +12,11 @@ export async function status(_req: Request, res: Response, next: NextFunction): 
     // `usage` counts real API calls made by THIS server since it started.
     res.json({ ...(await getApiStatus()), usage: getUsageStats() });
   } catch (err) {
+    // While the circuit breaker is open we do not call API-Football, but our own numbers are still useful.
+    if (err instanceof ApiUnavailableError) {
+      sendError(res, 503, "API_UNAVAILABLE", "API-Football is unavailable right now", { usage: getUsageStats() });
+      return;
+    }
     next(err);
   }
 }

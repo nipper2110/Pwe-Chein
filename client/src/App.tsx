@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { clearStale } from './api/staleStore'
 import LanguageSync from './components/LanguageSync'
 import ProtectedRoute from './components/ProtectedRoute'
 import Account from './pages/Account'
@@ -30,6 +31,7 @@ function RouteChangeEffects() {
   useEffect(() => {
     if (previousPath.current === pathname) return
     previousPath.current = pathname
+    clearStale() // the "saved data" note belongs to the page that was showing it
     window.scrollTo(0, 0)
     document.getElementById('main')?.focus({ preventScroll: true })
   }, [pathname])

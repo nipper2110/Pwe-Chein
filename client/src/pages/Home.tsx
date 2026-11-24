@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import DatePicker from '../components/DatePicker'
 import EmptyState from '../components/EmptyState'
+import { setStaleScope } from '../api/staleStore'
 import ErrorState from '../components/ErrorState'
 import LeagueSection from '../components/LeagueSection'
 import MatchListSkeleton from '../components/MatchListSkeleton'
@@ -55,7 +56,11 @@ export default function Home() {
         <SeasonBadge /> {t('home.seasonNote')}
       </p>
 
-      <DatePicker value={date} now={now} onChange={setDate} />
+      <DatePicker value={date} now={now} onChange={(next) => {
+          // Day lists of other days stay in the cache, so only the day being shown may trigger the "saved data" note.
+          setStaleScope((url) => !url.startsWith('/api/fixtures?date=') || url.includes(`date=${next}&`))
+          setDate(next)
+        }} />
 
       {day.isPending && <MatchListSkeleton />}
       {day.isError && <ErrorState error={day.error} onRetry={() => void day.refetch()} />}

@@ -1,6 +1,8 @@
 import { config } from "../config.js";
 import { CacheEntry } from "../models/CacheEntry.js";
-import { UpstreamError } from "../utils/httpError.js";
+import { markStale } from "../middleware/staleTracking.js";
+import { ApiUnavailableError, UpstreamError } from "../utils/httpError.js";
+import { breaker } from "./circuitBreaker.js";
 import { todayIn, toApiTimeZone } from "../utils/timezone.js";
 
 const BASE_URL = "https://v3.football.api-sports.io";
@@ -27,13 +29,14 @@ export interface ApiStatus {
 export interface UsageStats {
   realApiCalls: number; // calls that used quota since the server started
   cacheHits: number;
+  staleServed: number; // answers made from saved-but-expired data because API-Football was unavailable
   calls: { endpoint: string; at: string }[]; // last 20 real calls
 }
 
-const usage: UsageStats = { realApiCalls: 0, cacheHits: 0, calls: [] };
+const usage: UsageStats = { realApiCalls: 0, cacheHits: 0, staleServed: 0, calls: [] };
 
-export function getUsageStats(): UsageStats {
-  return usage;
+export function getUsageStats(): UsageStats & { breaker: ReturnType<typeof breaker.snapshot> } {
+  return { ...usage, breaker: breaker.snapshot() };
 }
 
 interface ApiEnvelope<T> {
@@ -48,27 +51,90 @@ function hasApiErrors(errors: unknown): boolean {
   return false;
 }
 
-async function callApi<T>(endpoint: string, query: string): Promise<ApiEnvelope<T>> {
+/**
+ * Which errors mean "stop calling for a while"? Only problems with the ACCOUNT, not with one request:
+ *  - `access`: account suspended / no access (long cooldown)
+ *  - `requests`, `rateLimit`, `token`: daily or per-minute limit reached, or a bad key (normal cooldown)
+ * Other errors (e.g. `plan`: "the free plan does not include this season") only fail that one request,
+ * so they must not switch off the whole site.
+ */
+export function breakerCooldownMinutes(errors: unknown): number | null {
+  if (!errors || typeof errors !== "object" || Array.isArray(errors)) return null;
+  const keys = Object.keys(errors);
+  if (keys.includes("access")) return config.API_BREAKER_ACCESS_MINUTES;
+  if (keys.some((k) => k === "requests" || k === "rateLimit" || k === "token")) return config.API_BREAKER_MINUTES;
+  return null;
+}
+
+/**
+ * The only place that talks to API-Football. It obeys the circuit breaker:
+ * while the breaker is open this throws ApiUnavailableError WITHOUT sending anything.
+ */
+async function callApi<T>(endpoint: string, query: string, label: string, countsQuota: boolean): Promise<ApiEnvelope<T>> {
   if (!config.API_FOOTBALL_KEY) {
     throw new Error("API_FOOTBALL_KEY is missing in server/.env");
   }
-  const res = await fetch(`${BASE_URL}${endpoint}${query}`, {
-    headers: { "x-apisports-key": config.API_FOOTBALL_KEY },
-  });
-  if (!res.ok) throw new UpstreamError(`API-Football ${endpoint} responded with HTTP ${res.status}`);
+  if (!breaker.acquire()) throw new ApiUnavailableError("circuit breaker is open");
 
-  const body = (await res.json()) as ApiEnvelope<T>;
-  if (hasApiErrors(body.errors)) {
-    throw new UpstreamError(`API-Football error on ${endpoint}: ${JSON.stringify(body.errors)}`);
+  if (countsQuota) {
+    usage.realApiCalls++;
+    usage.calls = [{ endpoint: label, at: new Date().toISOString() }, ...usage.calls].slice(0, 20);
+    console.log(`[api-football] REAL CALL #${usage.realApiCalls} GET ${label} (uses 1 quota)`);
+  } else {
+    console.log(`[api-football] GET ${label} (free, no quota)`);
   }
-  return body;
+
+  try {
+    let res: Response;
+    try {
+      res = await fetch(`${BASE_URL}${endpoint}${query}`, { headers: { "x-apisports-key": config.API_FOOTBALL_KEY } });
+    } catch {
+      throw new ApiUnavailableError(`API-Football ${endpoint} could not be reached`);
+    }
+    if (!res.ok) {
+      if (res.status === 429) breaker.trip(config.API_BREAKER_MINUTES, "API-Football answered HTTP 429 (too many requests)");
+      if (res.status === 401 || res.status === 403) {
+        breaker.trip(config.API_BREAKER_ACCESS_MINUTES, `API-Football answered HTTP ${res.status} (access denied)`);
+      }
+      throw new ApiUnavailableError(`API-Football ${endpoint} responded with HTTP ${res.status}`);
+    }
+
+    let body: ApiEnvelope<T>;
+    try {
+      body = (await res.json()) as ApiEnvelope<T>;
+    } catch {
+      throw new ApiUnavailableError(`API-Football ${endpoint} sent an unreadable answer`);
+    }
+    if (hasApiErrors(body.errors)) {
+      const detail = JSON.stringify(body.errors);
+      const cooldown = breakerCooldownMinutes(body.errors);
+      if (cooldown !== null) {
+        breaker.trip(cooldown, `API-Football reported ${detail}`);
+        throw new ApiUnavailableError(`API-Football error on ${endpoint}: ${detail}`);
+      }
+      breaker.onSuccess(); // the provider answered and the account is fine: only this request was wrong
+      throw new UpstreamError(`API-Football error on ${endpoint}: ${detail}`);
+    }
+    breaker.onSuccess();
+    return body;
+  } catch (err) {
+    breaker.onFailure(); // lets the next caller try again if this was the half-open test call
+    throw err;
+  }
 }
 
 // If two users ask for the same data at once, share one request instead of wasting two.
-const inFlight = new Map<string, Promise<unknown>>();
+const inFlight = new Map<string, Promise<{ data: unknown; stale: boolean }>>();
+
+/** How long expired entries are kept (for the "saved data" fallback) before MongoDB deletes them. */
+export const STALE_KEEP_SECONDS = 7 * 24 * 60 * 60;
 
 /**
  * Cache-first fetch. Checks MongoDB; only calls API-Football when there is no fresh entry.
+ *  - Fresh entry: returned, no API call.
+ *  - No fresh entry: ONE shared API call (identical concurrent requests wait for the same call).
+ *  - If the call is not possible (circuit breaker open) or fails, and an expired entry still exists, that "stale"
+ *    entry is returned (and the response gets the X-Data-Stale header). With nothing saved: ApiUnavailableError (503).
  * Errors are never cached.
  */
 export async function cachedFetch<T>(
@@ -84,42 +150,53 @@ export async function cachedFetch<T>(
   ).toString();
   const key = `${endpoint}?${query}`;
 
-  const cached = await CacheEntry.findOne({ key, expiresAt: { $gt: new Date() } }).lean();
-  if (cached) {
+  const entry = await CacheEntry.findOne({ key }).lean();
+  const freshUntil = entry ? (entry.freshUntil ?? entry.expiresAt) : null; // old entries have no freshUntil
+  if (entry && freshUntil && freshUntil.getTime() > Date.now()) {
     usage.cacheHits++;
     console.log(`[cache] HIT  ${key}`);
-    return cached.data as T;
+    return entry.data as T;
   }
 
-  const pending = inFlight.get(key);
-  if (pending) return pending as Promise<T>;
+  let pending = inFlight.get(key);
+  if (!pending) {
+    pending = (async () => {
+      try {
+        const body = await callApi<T>(endpoint, query ? `?${query}` : "", key, true);
+        const ttlSeconds = typeof ttl === "function" ? ttl(body.response) : ttl;
+        const fresh = Date.now() + ttlSeconds * 1000;
+        await CacheEntry.updateOne(
+          { key },
+          { key, data: body.response, freshUntil: new Date(fresh), expiresAt: new Date(fresh + STALE_KEEP_SECONDS * 1000) },
+          { upsert: true },
+        );
+        return { data: body.response as unknown, stale: false };
+      } catch (err) {
+        if (!entry) throw err;
+        // Real failures are logged here; a blocked call (breaker open) is silent because the breaker already said so.
+        if (!(err instanceof ApiUnavailableError && err.message === "circuit breaker is open")) {
+          console.error(`[cache] ${key} could not be refreshed, serving saved data:`, err instanceof Error ? err.message : err);
+        }
+        return { data: entry.data as unknown, stale: true };
+      }
+    })().finally(() => inFlight.delete(key));
+    inFlight.set(key, pending);
+  }
 
-  const request = (async () => {
-    usage.realApiCalls++;
-    usage.calls = [{ endpoint: key, at: new Date().toISOString() }, ...usage.calls].slice(0, 20);
-    console.log(`[api-football] REAL CALL #${usage.realApiCalls} GET ${key} (uses 1 quota)`);
-
-    const body = await callApi<T>(endpoint, query ? `?${query}` : "");
-    const ttlSeconds = typeof ttl === "function" ? ttl(body.response) : ttl;
-    await CacheEntry.updateOne(
-      { key },
-      { key, data: body.response, expiresAt: new Date(Date.now() + ttlSeconds * 1000) },
-      { upsert: true },
-    );
-    return body.response;
-  })().finally(() => inFlight.delete(key));
-
-  inFlight.set(key, request);
-  return request;
+  const result = await pending;
+  if (result.stale) {
+    usage.staleServed++;
+    markStale();
+  }
+  return result.data as T;
 }
 
 /** Calls /status. This endpoint does NOT use daily quota, so it is never cached. */
 export async function getApiStatus(): Promise<ApiStatus> {
-  console.log("[api-football] GET /status (free, no quota)");
   const body = await callApi<{
     subscription?: { plan?: string };
     requests?: { current?: number; limit_day?: number };
-  }>("/status", "");
+  }>("/status", "", "/status", false);
 
   const data = Array.isArray(body.response) ? {} : body.response;
   const current = data.requests?.current ?? 0;

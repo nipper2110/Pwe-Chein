@@ -71,7 +71,7 @@ export async function unfollowTeam(req: Request, res: Response, next: NextFuncti
     return;
   }
   try {
-    const user = await User.findByIdAndUpdate(req.userId, { $pull: { favorites: { teamId: parsed.data.teamId } } }, { new: true });
+    const user = await User.findByIdAndUpdate(req.userId, { $pull: { favorites: { teamId: parsed.data.teamId } } }, { returnDocument: "after" });
     if (!user) {
       sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");
       return;
