@@ -19,7 +19,8 @@
     "toDark": "เปลี่ยนเป็นธีมมืด"
   },
   "language": {
-    "label": "ภาษา"
+    "label": "ภาษา",
+    "current": "ภาษา: {{name}}"
   },
   "auth": {
     "login": "เข้าสู่ระบบ",

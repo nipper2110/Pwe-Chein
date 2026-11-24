@@ -19,7 +19,8 @@
     "toDark": "Switch to dark theme"
   },
   "language": {
-    "label": "Language"
+    "label": "Language",
+    "current": "Language: {{name}}"
   },
   "auth": {
     "login": "Log in",

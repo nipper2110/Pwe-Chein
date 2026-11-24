@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 import { useUser } from '../hooks/useAuth'
 import BrandMark from './BrandMark'
-import LanguageSelect from './LanguageSelect'
+import LanguageMenu from './LanguageMenu'
 import PixelBallIcon from './PixelBallIcon'
 import ThemeToggle from './ThemeToggle'
 import UserMenu from './UserMenu'
@@ -49,6 +49,7 @@ export default function SiteHeader() {
         </nav>
 
         <div className="ml-auto flex items-center gap-1.5">
+          <LanguageMenu />
           {/* On mobile the theme button moves into the account menu / Account page. */}
           <ThemeToggle className="hidden md:inline-flex" />
           {user.data ? (
@@ -57,8 +58,6 @@ export default function SiteHeader() {
             // While we are still asking the server who is logged in, show nothing to avoid a flicker.
             user.isSuccess && (
               <>
-                {/* Logged-in users change language in the avatar menu or on the Account page. */}
-                <LanguageSelect />
                 {/* Below lg there is no room for Sign up here (Burmese words are long); the login page and Account tab link to it. */}
                 <Link to="/login" className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">
                   {t('auth.login')}
