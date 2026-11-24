@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { fetchMe, loginUser, logoutUser, registerUser, type User } from '../api/auth'
+import { fetchMe, googleSignIn, loginUser, logoutUser, registerUser, type User } from '../api/auth'
 
 const ME_KEY = ['me']
 
@@ -25,6 +25,14 @@ export function useRegister() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: registerUser,
+    onSuccess: (user: User) => queryClient.setQueryData(ME_KEY, user),
+  })
+}
+
+export function useGoogleLogin() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: googleSignIn,
     onSuccess: (user: User) => queryClient.setQueryData(ME_KEY, user),
   })
 }

@@ -34,3 +34,7 @@ export const logoutUser = async (): Promise<void> => {
 
 export const saveLanguage = async (language: Language): Promise<User> =>
   (await request<{ user: User }>('/api/auth/language', { method: 'PUT', body: JSON.stringify({ language }) })).user
+
+/** Sends the Google ID token to our server, which verifies it and logs the person in (or creates the account). */
+export const googleSignIn = async (input: { credential: string; language?: Language }): Promise<User> =>
+  (await request<{ user: User }>('/api/auth/google', { method: 'POST', body: JSON.stringify(input) })).user

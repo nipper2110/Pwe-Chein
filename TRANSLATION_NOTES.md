@@ -89,6 +89,16 @@ them. The list of things I am **not sure about** is in the second half of this f
 | `nav.mobile`, `nav.main` | เมนูมือถือ, เมนูหลัก | Only read out by screen readers. |
 | Politeness | none | No polite particles (ครับ/ค่ะ) on purpose, as is normal for UI text. |
 
+### Google sign-in texts (new)
+
+| Key | Why I am unsure |
+|---|---|
+| `auth.or` (`သို့မဟုတ်` / `หรือ`) | The small "or" between the form and the Google button. |
+| `errors.USE_GOOGLE_SIGN_IN` | Tells someone who typed a password that their account was made with Google. It says "the Google button below". Check it is friendly and clear. |
+| `errors.GOOGLE_EMAIL_UNVERIFIED` | Long: "Google has not verified this email, verify it or sign up with a password". |
+| `errors.GOOGLE_ACCOUNT_CONFLICT`, `INVALID_GOOGLE_TOKEN`, `GOOGLE_NOT_CONFIGURED` | Short error messages. |
+| `auth.googleSignIn` / `googleSignUp` | Only read by screen readers (the iframe's title). Google writes the visible button text itself. |
+
 ### Both languages
 
 - `season.label` (ရာသီ / ฤดูกาล) and the season note: "free API plan limit" is translated literally.

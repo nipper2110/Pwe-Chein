@@ -28,7 +28,7 @@ const languageSchema = z.object({ language: z.enum(LANGUAGES, { message: "invali
 // (otherwise attackers could find out which emails are registered by timing the response).
 const DUMMY_HASH = bcrypt.hashSync("not-a-real-password", BCRYPT_COST);
 
-const publicUser = (u: { _id: unknown } & Pick<IUser, "name" | "email" | "language">) => ({
+export const publicUser = (u: { _id: unknown } & Pick<IUser, "name" | "email" | "language">) => ({
   id: String(u._id),
   name: u.name,
   email: u.email,
@@ -73,7 +73,14 @@ export async function login(req: Request, res: Response, next: NextFunction): Pr
 
   try {
     const user = await User.findOne({ email });
+    // Still hash-compare when there is nothing to compare with, so every answer takes the same time.
     const ok = await bcrypt.compare(password, user?.passwordHash ?? DUMMY_HASH);
+    if (user && !user.passwordHash) {
+      // Created with Google and no password set yet. Saying so is kinder than "wrong password"
+      // (the trade-off: it shows that this email has a Google account here).
+      sendError(res, 401, "USE_GOOGLE_SIGN_IN", "This account uses Google sign-in");
+      return;
+    }
     if (!user || !ok) {
       // Same message for "no such email" and "wrong password" on purpose.
       sendError(res, 401, "INVALID_CREDENTIALS", "Invalid email or password");

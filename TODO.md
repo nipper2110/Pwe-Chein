@@ -21,13 +21,56 @@ Done in code: `client/vercel.json` (the /api rewrite + single-page-app fallback)
 ### Before deploying
 
 - [ ] In `client/vercel.json`, replace `YOUR-RENDER-SERVICE.onrender.com` with your real Render hostname (keep `/api/:path*`).
-- [ ] Vercel project: Root Directory `client`, Framework `Vite`, build `npm run build`, output `dist`. No environment variables needed.
+- [ ] Vercel project: Root Directory `client`, Framework `Vite`, build `npm run build`, output `dist`. One environment variable: `VITE_GOOGLE_CLIENT_ID` (see "Sign in with Google").
 - [ ] Render service: Root Directory `server`; start command `npm start`. Build command `npm install --include=dev && npm run build`
       (TypeScript is a dev dependency, and Render sets NODE_ENV=production, which would skip it otherwise).
 - [ ] Render environment variables: `NODE_ENV=production`, `MONGODB_URI`, `API_FOOTBALL_KEY`, `SEASON=2024`, `JWT_SECRET` (a NEW long random value, not your local one),
-      `DEBUG_IP_ENDPOINT=true` (temporary, see below). Leave `TRUST_PROXY_HOPS` unset for now.
+      `DEBUG_IP_ENDPOINT=true` (temporary, see below), `GOOGLE_CLIENT_ID` (see "Sign in with Google"). Leave `TRUST_PROXY_HOPS` unset for now.
 - [ ] MongoDB Atlas > Network Access: allow `0.0.0.0/0` (Render's outgoing IPs change).
 - [ ] Render health check path: `/api/health`.
+
+### Sign in with Google (setup)
+
+The code is done. Google sign-in stays **hidden** until you add a client ID (nothing breaks without one).
+
+**1. Google Cloud Console** (https://console.cloud.google.com)
+- Create a project, then **APIs & Services > OAuth consent screen** (or "Google Auth Platform"): user type *External*, app name, support email.
+  While the app is in *Testing*, only the Google accounts you list as **Test users** can sign in. Press **Publish app** to let anyone in
+  (the basic scopes email/profile/openid need no Google review).
+- **Credentials > Create credentials > OAuth client ID > Application type: Web application.**
+- **Authorized JavaScript origins** (exact origins: no path, no trailing slash, no wildcards):
+  - `http://localhost:5173`  (local development)
+  - `http://localhost`       (Google asks for this one too when testing on localhost)
+  - `https://YOUR-PROJECT.vercel.app`  (your real production Vercel domain; add your own domain too if you have one)
+  - **Not** the Render URL: the Google popup runs on the page's origin, which is the Vercel domain.
+- **Authorized redirect URIs: leave empty.** (This sign-in sends the token to our server by itself; no redirect is used.)
+- Copy the **Client ID** (ends in `.apps.googleusercontent.com`). You do not need the Client secret.
+- Preview deployments (`*-git-*.vercel.app`) cannot be added (no wildcards), so the Google button will not work there.
+- Changes can take a few minutes (sometimes longer) to take effect.
+
+**2. Environment variables (the same Client ID in both places)**
+
+| Where | Name | Value | Notes |
+|---|---|---|---|
+| Local `server/.env` | `GOOGLE_CLIENT_ID` | the Client ID | restart the server |
+| Local `client/.env.local` | `VITE_GOOGLE_CLIENT_ID` | the Client ID | copy from `client/.env.example`; restart `npm run dev` (Vite reads it at start) |
+| **Render** (Environment) | `GOOGLE_CLIENT_ID` | the Client ID | redeploys on save |
+| **Vercel** (Settings > Environment Variables, "Production") | `VITE_GOOGLE_CLIENT_ID` | the Client ID | **Vite bakes it in at build time: you must redeploy** after adding or changing it |
+
+**3. After deploying**
+- [ ] The Google button shows under the form on `/login` and `/register`. Sign in with a *test user* account: you land on "My teams".
+- [ ] MongoDB Atlas > `users`: the new user has a `googleId` and no `passwordHash`.
+- [ ] Sign out and sign in with Google again: same account, no duplicate.
+- [ ] Log in with that email + any password: you get the "created with Google" message (not "wrong password").
+- [ ] Register an email/password account first, sign out, then use Google with the *same* email: it links to that account (the password keeps working).
+- [ ] If the button is missing: browser console. "origin is not allowed for the given client ID" = add the origin in Google Cloud Console.
+      No console message and no button = `VITE_GOOGLE_CLIENT_ID` was not set when Vercel built (redeploy).
+- [ ] Render logs show `[google] token rejected: ...` when a token fails (wrong client ID on the server, or an expired token).
+- [ ] Do **not** add a `Cross-Origin-Opener-Policy: same-origin` header on Vercel: it breaks Google's sign-in popup.
+
+**Known limits:** the Google button's own text language is chosen by Google (the site passes the language, but I could not confirm Burmese support
+without a real client ID); a Google-only account cannot use the password login until a "set a password" feature exists (not built yet);
+an unverified Google email is refused for both linking and creating accounts (on purpose).
 
 ### After deploying: what to check (in this order)
 

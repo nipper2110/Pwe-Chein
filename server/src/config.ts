@@ -9,6 +9,8 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is missing in server/.env"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters (see .env.example)"),
   NODE_ENV: z.string().default("development"),
+  // The OAuth client ID from Google Cloud Console. Empty = Google sign-in is switched off (nothing crashes).
+  GOOGLE_CLIENT_ID: z.string().trim().default(""),
   // How many proxies sit between the internet and Express. See index.ts. Production default: 2.
   // An empty value (e.g. a blank line copied from .env.example) counts as "not set", not as 0.
   TRUST_PROXY_HOPS: z.preprocess((v) => (v === "" ? undefined : v), z.coerce.number().int().min(0).max(5).optional()),
@@ -30,5 +32,6 @@ export const config = {
    * saw (Vercel's) on the right. So Express must trust 2 hops to read the visitor's IP.
    * Locally there is no proxy, so 0 (never trust X-Forwarded-For, which anyone can fake).
    */
+  googleEnabled: parsed.GOOGLE_CLIENT_ID !== "",
   trustProxyHops: parsed.TRUST_PROXY_HOPS ?? (parsed.NODE_ENV === "production" ? 2 : 0),
 };

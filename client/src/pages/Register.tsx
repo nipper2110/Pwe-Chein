@@ -5,6 +5,7 @@ import { ApiError } from '../api/auth'
 import AuthPageShell from '../components/AuthPageShell'
 import { usePageMeta } from '../hooks/usePageMeta'
 import FormField from '../components/FormField'
+import GoogleSignIn from '../components/GoogleSignIn'
 import { useRegister, useUser } from '../hooks/useAuth'
 import { useErrorText } from '../hooks/useErrorText'
 import { currentLanguage } from '../i18n'
@@ -48,6 +49,7 @@ export default function Register() {
           {register.isPending ? t('auth.creatingAccount') : t('auth.signup')}
         </button>
       </form>
+      <GoogleSignIn mode="signup" />
       <p className="text-sm text-slate-400">
         {t('auth.haveAccount')} <Link to="/login" state={{ from }} className="text-pitch underline underline-offset-2 hover:no-underline">{t('auth.login')}</Link>
       </p>

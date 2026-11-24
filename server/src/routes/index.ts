@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { login, logout, me, register, setLanguage } from "../controllers/authController.js";
+import { googleLogin } from "../controllers/googleAuthController.js";
 import { followTeam, listFavorites, unfollowTeam } from "../controllers/favoritesController.js";
 import { fixturesByDate, liveFixtures } from "../controllers/fixturesController.js";
 import { standings, topScorers } from "../controllers/leaguesController.js";
@@ -26,6 +27,8 @@ router.get("/matches/:id", strictLimiter, matchById);
 router.get("/teams/:id", strictLimiter, teamById);
 router.post("/auth/register", registerLimiter, register);
 router.post("/auth/login", loginIpLimiter, loginAccountLimiter, loginEmailLimiter, login);
+// Same failed-attempt limits as the password login (per visitor IP). The email-only limit is not used: there is no email in this request.
+router.post("/auth/google", loginIpLimiter, loginAccountLimiter, googleLogin);
 router.post("/auth/logout", logout);
 router.get("/auth/me", requireAuth, me);
 router.put("/auth/language", requireAuth, setLanguage);

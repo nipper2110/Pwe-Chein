@@ -39,7 +39,10 @@
     "menuFor": "Account menu for {{name}}",
     "menuLabel": "Account",
     "welcomeBack": "Welcome back, {{name}}",
-    "loginToFollow": "Log in to follow teams and see their matches."
+    "loginToFollow": "Log in to follow teams and see their matches.",
+    "or": "or",
+    "googleSignIn": "Sign in with Google",
+    "googleSignUp": "Sign up with Google"
   },
   "live": {
     "now": "Live now",
@@ -271,7 +274,12 @@
       "register": "Too many accounts created from this connection.",
       "retry_one": "Try again in {{count}} minute.",
       "retry_other": "Try again in {{count}} minutes."
-    }
+    },
+    "USE_GOOGLE_SIGN_IN": "This account was created with Google. Use the Google button below to sign in.",
+    "INVALID_GOOGLE_TOKEN": "Google sign-in failed. Please try again.",
+    "GOOGLE_EMAIL_UNVERIFIED": "Google hasn't verified this email address, so we can't use it. Verify it with Google and try again, or sign up with email and password.",
+    "GOOGLE_ACCOUNT_CONFLICT": "This email is already linked to a different Google account.",
+    "GOOGLE_NOT_CONFIGURED": "Google sign-in isn't available right now."
   },
   "validation": {
     "invalid_email": "Enter a valid email",

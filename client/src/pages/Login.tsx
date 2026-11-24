@@ -5,6 +5,7 @@ import { ApiError } from '../api/auth'
 import AuthPageShell from '../components/AuthPageShell'
 import { usePageMeta } from '../hooks/usePageMeta'
 import FormField from '../components/FormField'
+import GoogleSignIn from '../components/GoogleSignIn'
 import { useLogin, useUser } from '../hooks/useAuth'
 import { useErrorText } from '../hooks/useErrorText'
 
@@ -44,6 +45,7 @@ export default function Login() {
           {login.isPending ? t('auth.loggingIn') : t('auth.login')}
         </button>
       </form>
+      <GoogleSignIn mode="signin" />
       <p className="text-sm text-slate-400">
         {t('auth.newHere')} <Link to="/register" state={{ from }} className="text-pitch underline underline-offset-2 hover:no-underline">{t('auth.createLink')}</Link>
       </p>
