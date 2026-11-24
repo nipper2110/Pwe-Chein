@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import BottomTabBar from './BottomTabBar'
+import SiteFooter from './SiteFooter'
 import SiteHeader from './SiteHeader'
 
 interface Props {
@@ -21,6 +22,7 @@ export default function PageLayout({ children, className = 'space-y-5' }: Props)
         <main id="main" tabIndex={-1} className={className}>
           {children}
         </main>
+        <SiteFooter />
       </div>
       <BottomTabBar />
     </>

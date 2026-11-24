@@ -9,9 +9,11 @@ import Home from './pages/Home'
 import League from './pages/League'
 import Login from './pages/Login'
 import Match from './pages/Match'
+import Privacy from './pages/Privacy'
 import NotFound from './pages/NotFound'
 import Register from './pages/Register'
 import Team from './pages/Team'
+import Terms from './pages/Terms'
 import { DEFAULT_LEAGUE_ID } from './utils/leagues'
 
 /**
@@ -57,6 +59,8 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/terms" element={<Terms />} />
         {/* Everything inside needs a login */}
         <Route element={<ProtectedRoute />}>
           <Route path="/dashboard" element={<Dashboard />} />

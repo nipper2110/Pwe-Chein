@@ -99,6 +99,21 @@ them. The list of things I am **not sure about** is in the second half of this f
 | `errors.GOOGLE_ACCOUNT_CONFLICT`, `INVALID_GOOGLE_TOKEN`, `GOOGLE_NOT_CONFIGURED` | Short error messages. |
 | `auth.googleSignIn` / `googleSignUp` | Only read by screen readers (the iframe's title). Google writes the visible button text itself. |
 
+### Privacy Policy and Terms of Service (new, `privacy.*`, `terms.*`, `legal.*`, `footer.*`, `auth.agree`)
+
+These are legal-style texts written by an AI. Please have a native speaker read them, and treat them as a summary of what the code does, not as legal advice.
+
+| Key | Why I am unsure |
+|---|---|
+| `privacy.title` / `terms.title` (ကိုယ်ရေးကိုယ်တာ မူဝါဒ / ဝန်ဆောင်မှု စည်းမျဉ်းများ) | Standard-sounding names, but there may be a more common Burmese wording. |
+| Whole Burmese pages | I used the friendly spoken style (`...ပါတယ်`) to keep them simple. A legal page may need the written style (`...ပါသည်`). English words kept on purpose: portfolio, hash, cookie, local storage, httpOnly, script, spam, scraping, API. |
+| `legal.lastUpdated` | The Burmese date is written `2026 နိုဝင်ဘာ 24` (same order as the rest of the site). The date is fixed text in the three JSON files: change it there when the policy changes. |
+| `privacy.collect.email` | Explains "password hash" in one short phrase. Check it is understandable. |
+| `terms.about.body` | `"ရှိတဲ့အတိုင်း"` for "as is" (no warranty). |
+| Thai pages | Neutral written style, no polite particles. `ตามสภาพ` for "as is". |
+| `footer.privacy` / `footer.terms` | Short forms (ကိုယ်ရေးကိုယ်တာ / စည်းမျဉ်းများ, ความเป็นส่วนตัว / ข้อกำหนด) so the footer fits on a phone. |
+| `auth.agree` | One sentence with two links inside it; the word order of the links differs per language. |
+
 ### Both languages
 
 - `season.label` (ရာသီ / ฤดูกาล) and the season note: "free API plan limit" is translated literally.

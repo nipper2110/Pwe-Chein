@@ -42,7 +42,8 @@
     "loginToFollow": "Log in to follow teams and see their matches.",
     "or": "or",
     "googleSignIn": "Sign in with Google",
-    "googleSignUp": "Sign up with Google"
+    "googleSignUp": "Sign up with Google",
+    "agree": "By continuing, you agree to our <terms>Terms</terms> and <privacy>Privacy Policy</privacy>."
   },
   "live": {
     "now": "Live now",
@@ -290,5 +291,78 @@
     "password_required": "Password is required",
     "email_taken": "Already registered",
     "invalid_language": "That language is not supported"
+  },
+  "footer": {
+    "nav": "Site information",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "copyright": "© 2026 Pwechein"
+  },
+  "legal": {
+    "lastUpdated": "Last updated: November 24, 2026",
+    "contactTitle": "Contact",
+    "contactText": "Questions, or requests to delete your data, can be sent to:"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "metaDescription": "What data Pwechein keeps, why, and how you can have it deleted.",
+    "intro": "Pwechein (ပွဲချိန်) is a free personal portfolio project that shows live football scores. This page explains what data the site keeps about you and why. It is written to match what the code actually does.",
+    "collect": {
+      "title": "What we collect",
+      "intro": "We only keep what is needed for accounts and for following teams:",
+      "email": "If you sign up with email: your name, your email address and a password hash (a scrambled version of your password; we never store the password itself).",
+      "google": "If you sign in with Google: your Google account ID, and the name and email address Google gives us. We do not store your Google profile picture, and we never see your Google password.",
+      "teams": "The teams you follow (team ID, name and logo) and the language you chose for your account.",
+      "theme": "Your theme choice (light or dark) is saved only in your own browser, not on our server.",
+      "ip": "To stop abuse, the server briefly keeps your IP address in its memory to count repeated requests. It is not saved in our database."
+    },
+    "use": {
+      "title": "How we use it",
+      "body": "Only to log you in and to show the teams you follow and their matches. There are no ads. We do not sell your data and we do not share it with anyone, except the services below that run the site."
+    },
+    "cookies": {
+      "title": "Cookies and local storage",
+      "cookie": "We set one cookie, pwechein_token. It is an httpOnly cookie (scripts on the page cannot read it) that keeps you logged in for up to 7 days. It is removed when you log out. We use no tracking or advertising cookies.",
+      "storage": "We also use your browser's local storage to remember your language (pwechein-lang) and your theme (pwechein-theme). This stays on your device.",
+      "google": "Google's sign-in script is loaded only on the log-in and sign-up pages. It is run by Google and may use its own cookies under Google's privacy policy."
+    },
+    "services": {
+      "title": "Services we use",
+      "intro": "These services help run the site:",
+      "google": "Google Sign-In: lets you log in with your Google account.",
+      "fonts": "Google Fonts: loads the site's fonts, so Google receives your IP address when a page loads.",
+      "api": "API-Football: the source of the match data. Our server asks it for matches; no user data is sent to it.",
+      "mongo": "MongoDB Atlas: the database where accounts are stored.",
+      "hosting": "Vercel and Render: host the website and the server. They may keep normal server logs, such as IP addresses."
+    },
+    "deletion": {
+      "title": "Deleting your data",
+      "body": "You can ask me to delete your account and all the data linked to it by emailing the address in the Contact section below. Send it from the email address of the account. We keep your data until you ask us to delete it."
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "metaDescription": "The rules for using Pwechein, a free personal portfolio project.",
+    "intro": "By using Pwechein (ပွဲချိန်) you agree to these terms. They are short.",
+    "about": {
+      "title": "About the service",
+      "body": "Pwechein is a free personal portfolio project. It is provided \"as is\", without any warranty. There is no promise that it will always work, be available or be free of errors."
+    },
+    "data": {
+      "title": "Match data",
+      "body": "Scores, fixtures, tables and statistics come from API-Football and may be delayed, incomplete or wrong. Do not rely on them for anything important. Pwechein is not for betting or gambling."
+    },
+    "use": {
+      "title": "Acceptable use",
+      "body": "Please do not abuse the service. This includes sending spam, scraping the site or its API automatically, trying to break or overload it, and trying to get into other people's accounts. Accounts that do this may be limited or removed."
+    },
+    "account": {
+      "title": "Your account",
+      "body": "You are responsible for keeping your password safe and for what happens under your account. You can ask for your account to be deleted at any time (see Contact below)."
+    },
+    "changes": {
+      "title": "Changes and stopping",
+      "body": "The service may change or stop at any time. These terms may change too; the date above shows the latest update. The Privacy Policy explains how your data is handled."
+    }
   }
 }

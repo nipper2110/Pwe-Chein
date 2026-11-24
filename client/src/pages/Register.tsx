@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { ApiError } from '../api/auth'
 import AuthPageShell from '../components/AuthPageShell'
@@ -50,6 +50,9 @@ export default function Register() {
         </button>
       </form>
       <GoogleSignIn mode="signup" />
+      <p className="text-xs text-slate-400">
+        <Trans i18nKey="auth.agree" components={{ terms: <Link to="/terms" className="underline underline-offset-2 hover:text-slate-200" />, privacy: <Link to="/privacy" className="underline underline-offset-2 hover:text-slate-200" /> }} />
+      </p>
       <p className="text-sm text-slate-400">
         {t('auth.haveAccount')} <Link to="/login" state={{ from }} className="text-pitch underline underline-offset-2 hover:no-underline">{t('auth.login')}</Link>
       </p>
