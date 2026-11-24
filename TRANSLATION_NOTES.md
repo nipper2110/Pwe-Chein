@@ -106,13 +106,21 @@ These are legal-style texts written by an AI. Please have a native speaker read 
 | Key | Why I am unsure |
 |---|---|
 | `privacy.title` / `terms.title` (ကိုယ်ရေးကိုယ်တာ မူဝါဒ / ဝန်ဆောင်မှု စည်းမျဉ်းများ) | Standard-sounding names, but there may be a more common Burmese wording. |
-| Whole Burmese pages | I used the friendly spoken style (`...ပါတယ်`) to keep them simple. A legal page may need the written style (`...ပါသည်`). English words kept on purpose: portfolio, hash, cookie, local storage, httpOnly, script, spam, scraping, API. |
+| Whole Burmese pages | I used the friendly spoken style (`...ပါတယ်`) to keep them simple. A legal page may need the written style (`...ပါသည်`). English words kept on purpose: hash, cookie, local storage, httpOnly, script, spam, scraping, API. |
 | `legal.lastUpdated` | The Burmese date is written `2026 နိုဝင်ဘာ 24` (same order as the rest of the site). The date is fixed text in the three JSON files: change it there when the policy changes. |
 | `privacy.collect.email` | Explains "password hash" in one short phrase. Check it is understandable. |
 | `terms.about.body` | `"ရှိတဲ့အတိုင်း"` for "as is" (no warranty). |
 | Thai pages | Neutral written style, no polite particles. `ตามสภาพ` for "as is". |
 | `footer.privacy` / `footer.terms` | Short forms (ကိုယ်ရေးကိုယ်တာ / စည်းမျဉ်းများ, ความเป็นส่วนตัว / ข้อกำหนด) so the footer fits on a phone. |
 | `auth.agree` | One sentence with two links inside it; the word order of the links differs per language. |
+
+**Change: from "portfolio project" to a public service (Nov 2026).** The pages now call Pwechein "a free football scores and fixtures service, operated by an individual, Chan Nyein Moe". Changed keys (same in en, my, th): `privacy.intro`, `terms.metaDescription`, `terms.about.body`, `terms.changes.body`, `privacy.deletion.body` ("ask me" is now "ask us"), `legal.contactText` (now names the operator). Burmese uses `ကျွန်ုပ်တို့` for "we" and `သင်` / `သင့်` for "you" in these pages. Things to check:
+
+| Key | Why I am unsure |
+|---|---|
+| `terms.about.body` | "as is" and "as available" (`ရှိတဲ့အတိုင်း` / `ရနိုင်တဲ့အတိုင်း`, `ตามสภาพ` / `ตามที่มี`) are standard legal phrases that are hard to translate. |
+| `privacy.intro`, `legal.contactText` | "operated by an individual" (`တစ်ဦးတည်းသော လူပုဂ္ဂိုလ်`, `บุคคลคนเดียว`) should read naturally, not stiff. |
+| Legal status | A public service with real users may need a proper legal review (who is the data controller, GDPR/other local rules). These texts are not legal advice. |
 
 ### Both languages
 
