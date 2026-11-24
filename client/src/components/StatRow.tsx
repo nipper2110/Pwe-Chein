@@ -1,4 +1,6 @@
-import { isLowerBetter, statLabel } from '../utils/statLabels'
+import { useTranslation } from 'react-i18next'
+import { useLabels } from '../hooks/useLabels'
+import { isLowerBetter } from '../utils/statLabels'
 
 interface Props {
   type: string
@@ -17,7 +19,8 @@ const EVEN = 'font-semibold text-slate-300'
 
 /** One statistic: values on both sides and a bar split in proportion to them. */
 export default function StatRow({ type, home, away }: Props) {
-  const label = statLabel(type)
+  const { t } = useTranslation()
+  const label = useLabels().stat(type)
   const h = toNumber(home)
   const a = toNumber(away)
   const total = h + a
@@ -35,7 +38,7 @@ export default function StatRow({ type, home, away }: Props) {
         <span className="text-xs text-slate-400">{label}</span>
         <span className={`font-mono ${awayClass}`}>{away ?? 0}</span>
       </div>
-      <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full bg-slate-800" role="img" aria-label={`${label}: ${home ?? 0} to ${away ?? 0}`}>
+      <div className="flex h-1.5 gap-0.5 overflow-hidden rounded-full bg-slate-800" role="img" aria-label={t('stats.barLabel', { label, home: home ?? 0, away: away ?? 0 })}>
         <div className="bg-pitch" style={{ width: `${homeShare}%` }} />
         <div className="bg-sky-500" style={{ width: `${100 - homeShare}%` }} />
       </div>

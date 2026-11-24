@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import ErrorState from '../components/ErrorState'
 import EventsTimeline from '../components/EventsTimeline'
@@ -13,29 +14,36 @@ import { ApiError } from '../api/http'
 import NotFoundState from '../components/NotFoundState'
 
 export default function Match() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const matchId = Number(id)
-  if (!Number.isInteger(matchId) || matchId <= 0) return <MatchShell><ErrorState message="Invalid match id" onRetry={() => history.back()} /></MatchShell>
+  if (!Number.isInteger(matchId) || matchId <= 0) return <MatchShell><ErrorState message={t('errors.INVALID_MATCH_ID')} onRetry={() => history.back()} /></MatchShell>
   return <MatchView matchId={matchId} />
 }
 
 function MatchShell({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation()
   return (
     <PageLayout>
-      <Link to="/" className="inline-block text-sm text-slate-400 hover:text-slate-200">← All matches</Link>
+      <Link to="/" className="inline-block text-sm text-slate-400 hover:text-slate-200">← {t('match.backToAll')}</Link>
       {children}
     </PageLayout>
   )
 }
 
 function MatchView({ matchId }: { matchId: number }) {
+  const { t } = useTranslation()
   const match = useMatch(matchId)
   const data = match.data
   const notFound = match.error instanceof ApiError && match.error.status === 404
   usePageMeta({
-    title: data ? `${data.teams.home.name} vs ${data.teams.away.name}` : notFound ? 'Match not found' : 'Match',
+    title: data
+      ? t('match.versus', { home: data.teams.home.name, away: data.teams.away.name })
+      : notFound
+        ? t('notFound.matchTitle')
+        : t('match.metaTitleFallback'),
     description: data
-      ? `${data.teams.home.name} vs ${data.teams.away.name} (${data.league.name}): score, events, lineups and statistics.`
+      ? t('match.metaDescription', { home: data.teams.home.name, away: data.teams.away.name, league: data.league.name })
       : undefined,
     noindex: !data,
   })
@@ -47,8 +55,8 @@ function MatchView({ matchId }: { matchId: number }) {
   return (
     <MatchShell>
       {match.isPending && <TableSkeleton rows={8} />}
-      {notFound && <NotFoundState title="Match not found" message="That match doesn't exist or isn't in one of our leagues." />}
-      {match.isError && !notFound && <ErrorState message={match.error.message} onRetry={() => void match.refetch()} />}
+      {notFound && <NotFoundState title={t('notFound.matchTitle')} message={t('notFound.matchMessage')} />}
+      {match.isError && !notFound && <ErrorState error={match.error} onRetry={() => void match.refetch()} />}
       {match.isSuccess && (
         <>
           <MatchHeader match={match.data} />

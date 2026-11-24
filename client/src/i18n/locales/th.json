@@ -1,0 +1,282 @@
+{
+  "common": {
+    "tryAgain": "ลองอีกครั้ง",
+    "somethingWrong": "เกิดข้อผิดพลาดบางอย่าง",
+    "loading": "กำลังโหลด",
+    "loadingMatches": "กำลังโหลดแมตช์"
+  },
+  "nav": {
+    "matches": "แมตช์",
+    "leagues": "ลีก",
+    "myTeams": "ทีมของฉัน",
+    "account": "บัญชี",
+    "main": "เมนูหลัก",
+    "mobile": "เมนูมือถือ",
+    "skip": "ข้ามไปยังเนื้อหา"
+  },
+  "theme": {
+    "toLight": "เปลี่ยนเป็นธีมสว่าง",
+    "toDark": "เปลี่ยนเป็นธีมมืด"
+  },
+  "language": {
+    "label": "ภาษา"
+  },
+  "auth": {
+    "login": "เข้าสู่ระบบ",
+    "signup": "สมัครสมาชิก",
+    "logout": "ออกจากระบบ",
+    "loggingIn": "กำลังเข้าสู่ระบบ…",
+    "creatingAccount": "กำลังสร้างบัญชี…",
+    "createTitle": "สร้างบัญชีของคุณ",
+    "name": "ชื่อ",
+    "email": "อีเมล",
+    "password": "รหัสผ่าน",
+    "passwordHint": "อย่างน้อย 8 ตัวอักษร",
+    "newHere": "ยังไม่มีบัญชีใช่ไหม?",
+    "createLink": "สร้างบัญชี",
+    "haveAccount": "มีบัญชีอยู่แล้ว?",
+    "menuFor": "เมนูบัญชีของ {{name}}",
+    "menuLabel": "บัญชี",
+    "welcomeBack": "ยินดีต้อนรับกลับมา {{name}}",
+    "loginToFollow": "เข้าสู่ระบบเพื่อติดตามทีมและดูแมตช์ของทีมที่ติดตาม"
+  },
+  "live": {
+    "now": "กำลังแข่งขัน",
+    "badge": "สด"
+  },
+  "date": {
+    "yesterday": "เมื่อวาน",
+    "today": "วันนี้",
+    "tomorrow": "พรุ่งนี้",
+    "chooseDay": "เลือกวัน"
+  },
+  "season": {
+    "label": "ฤดูกาล {{years}}"
+  },
+  "home": {
+    "metaTitle": "โปรแกรมฟุตบอลและผลสดวันนี้",
+    "metaDescription": "ผลสดและโปรแกรมการแข่งขันของ Premier League, La Liga, Serie A, Bundesliga, Ligue 1 และ Champions League แยกตามลีก ตามเขตเวลาของคุณ",
+    "heading": "ผลบอลสดและโปรแกรมการแข่งขัน",
+    "seasonNote": "ตารางคะแนนและดาวซัลโวใช้ข้อมูลฤดูกาลนี้ (ข้อจำกัดของ API แบบฟรี)",
+    "noMatches": "วันนี้ไม่มีแมตช์ใน 6 ลีกที่เรารองรับ"
+  },
+  "league": {
+    "metaTitle": "ตารางคะแนนและดาวซัลโว {{name}}",
+    "metaDescription": "ตารางคะแนน ฟอร์ม และโซนต่าง ๆ ของ {{name}} พร้อมรายชื่อดาวซัลโว",
+    "standings": "ตารางคะแนน",
+    "topScorers": "ดาวซัลโว",
+    "noStandings": "ยังไม่มีตารางคะแนน",
+    "noScorers": "ยังไม่มีข้อมูลดาวซัลโว",
+    "choose": "เลือกลีก",
+    "goals": "ประตู",
+    "assists_other": "แอสซิสต์ {{count}} ครั้ง"
+  },
+  "standings": {
+    "caption": "ตารางคะแนนลีก",
+    "team": "ทีม",
+    "pShort": "แข่ง",
+    "wShort": "ชนะ",
+    "dShort": "เสมอ",
+    "lShort": "แพ้",
+    "gdShort": "ได้เสีย",
+    "formShort": "ฟอร์ม",
+    "ptsShort": "แต้ม",
+    "played": "จำนวนนัดที่แข่ง",
+    "won": "ชนะ",
+    "drawn": "เสมอ",
+    "lost": "แพ้",
+    "goalDifference": "ผลต่างประตูได้เสีย",
+    "form": "5 นัดล่าสุด (เก่าสุดไปใหม่สุด)",
+    "points": "คะแนน",
+    "legend": "สีในตาราง"
+  },
+  "zones": {
+    "relegation": "ตกชั้น"
+  },
+  "match": {
+    "backToAll": "แมตช์ทั้งหมด",
+    "tablist": "รายละเอียดแมตช์",
+    "tabEvents": "เหตุการณ์",
+    "tabLineups": "ผู้เล่น",
+    "tabStats": "สถิติ",
+    "versus": "{{home}} พบ {{away}}",
+    "metaTitleFallback": "แมตช์",
+    "metaDescription": "{{home}} พบ {{away}} ({{league}}): ผลการแข่งขัน เหตุการณ์ รายชื่อผู้เล่น และสถิติ",
+    "referee": "ผู้ตัดสิน: {{name}}",
+    "fullTime": "จบเกม",
+    "noEvents": "ยังไม่มีเหตุการณ์ จะแสดงเมื่อแมตช์เริ่มแล้ว",
+    "noLineups": "ยังไม่ประกาศรายชื่อผู้เล่น โดยปกติจะขึ้นก่อนเริ่มเกมประมาณหนึ่งชั่วโมง",
+    "noStats": "ยังไม่มีสถิติของแมตช์นี้",
+    "coach": "โค้ช: {{name}}",
+    "startingXI": "ผู้เล่นตัวจริง 11 คน",
+    "substitutes": "ตัวสำรอง",
+    "assist": "แอสซิสต์: {{name}}",
+    "substitution": "การเปลี่ยนตัว"
+  },
+  "events": {
+    "normalGoal": "ประตู",
+    "ownGoal": "ทำเข้าประตูตัวเอง",
+    "penalty": "จุดโทษ",
+    "missedPenalty": "พลาดจุดโทษ",
+    "yellowCard": "ใบเหลือง",
+    "redCard": "ใบแดง",
+    "secondYellow": "ใบเหลืองใบที่สอง",
+    "goalCancelled": "ประตูถูกยกเลิก",
+    "penaltyConfirmed": "ยืนยันจุดโทษ",
+    "cardUpgrade": "เปลี่ยนเป็นใบแดง",
+    "var": "VAR"
+  },
+  "timeline": {
+    "HT": "พักครึ่ง",
+    "FT": "จบเกม",
+    "AET": "ต่อเวลา",
+    "PEN": "ดวลจุดโทษ"
+  },
+  "stats": {
+    "possession": "การครองบอล",
+    "expectedGoals": "ประตูที่คาดหวัง (xG)",
+    "goalsPrevented": "ประตูที่ป้องกันได้",
+    "totalShots": "การยิงทั้งหมด",
+    "shotsOnTarget": "ยิงตรงกรอบ",
+    "shotsOffTarget": "ยิงไม่ตรงกรอบ",
+    "shotsInsideBox": "ยิงในกรอบเขตโทษ",
+    "shotsOutsideBox": "ยิงนอกกรอบเขตโทษ",
+    "blockedShots": "ถูกบล็อก",
+    "cornerKicks": "เตะมุม",
+    "offsides": "ล้ำหน้า",
+    "fouls": "ฟาวล์",
+    "yellowCards": "ใบเหลือง",
+    "redCards": "ใบแดง",
+    "goalkeeperSaves": "เซฟของผู้รักษาประตู",
+    "totalPasses": "จำนวนการส่งบอล",
+    "accuratePasses": "ส่งบอลแม่นยำ",
+    "passAccuracy": "ความแม่นยำในการส่งบอล",
+    "freeKicks": "ฟรีคิก",
+    "barLabel": "{{label}}: {{home}} ต่อ {{away}}"
+  },
+  "status": {
+    "NS": "ยังไม่เริ่ม",
+    "TBD": "ยังไม่กำหนดเวลา",
+    "1H": "ครึ่งแรก",
+    "HT": "พักครึ่ง",
+    "2H": "ครึ่งหลัง",
+    "ET": "ต่อเวลา",
+    "BT": "พักก่อนต่อเวลา",
+    "P": "ดวลจุดโทษ",
+    "SUSP": "หยุดการแข่งขัน",
+    "INT": "หยุดชั่วคราว",
+    "FT": "จบเกม",
+    "AET": "จบหลังต่อเวลา",
+    "PEN": "จบด้วยจุดโทษ",
+    "PST": "เลื่อนการแข่งขัน",
+    "CANC": "ยกเลิก",
+    "ABD": "ยุติการแข่งขัน",
+    "AWD": "ตัดสินผลให้",
+    "WO": "ไม่มาแข่ง",
+    "LIVE": "สด"
+  },
+  "round": {
+    "regularSeason": "ฤดูกาลปกติ - นัดที่ {{n}}",
+    "leagueStage": "ลีกเฟส - นัดที่ {{n}}",
+    "groupStage": "รอบแบ่งกลุ่ม - นัดที่ {{n}}"
+  },
+  "team": {
+    "backToLeagues": "ลีก",
+    "seasonNote": "ผลการแข่งขันและสถิติมาจากฤดูกาลนี้ (ข้อจำกัดของ API แบบฟรี)",
+    "metaTitleFallback": "ทีม",
+    "metaDescription": "{{name}}: สรุปฤดูกาล ผลงานล่าสุด และสถิติของฤดูกาล {{years}}",
+    "recentResults": "ผลงานล่าสุด",
+    "last5": "5 นัดล่าสุด",
+    "nextFixtures": "โปรแกรมนัดต่อไป",
+    "upcoming": "นัดต่อไป",
+    "noResults": "ไม่พบผลการแข่งขันในฤดูกาลนี้",
+    "country": "ประเทศ",
+    "founded": "ก่อตั้ง",
+    "stadium": "สนาม",
+    "capacity": "ความจุ",
+    "summaryTitle": "สรุปฤดูกาล",
+    "played": "แข่ง",
+    "won": "ชนะ",
+    "drawn": "เสมอ",
+    "lost": "แพ้",
+    "goalsForAgainst": "ประตูได้ - เสีย",
+    "difference": "ผลต่าง {{value}}",
+    "cleanSheets": "คลีนชีต",
+    "topFormation": "แผนการเล่นที่ใช้บ่อยสุด",
+    "usedIn_other": "ใช้ใน {{count}} นัด"
+  },
+  "follow": {
+    "follow": "ติดตาม",
+    "following": "กำลังติดตาม",
+    "unfollow": "เลิกติดตาม",
+    "followTeam": "ติดตาม {{name}}",
+    "unfollowTeam": "เลิกติดตาม {{name}}"
+  },
+  "dashboard": {
+    "title": "ทีมของฉัน",
+    "none": "คุณยังไม่ได้ติดตามทีมใดเลย",
+    "find": "ค้นหาทีม",
+    "hint": "เปิดลีก เลือกทีม แล้วกด 'ติดตาม'",
+    "teamsYouFollow": "ทีมที่คุณติดตาม",
+    "yourMatches": "แมตช์ของทีมที่คุณติดตาม",
+    "noneThisWeek": "ไม่มีทีมที่คุณติดตามลงแข่งตั้งแต่เมื่อวานถึงพรุ่งนี้"
+  },
+  "results": {
+    "win": "ชนะ",
+    "draw": "เสมอ",
+    "loss": "แพ้",
+    "formAria": "ผลล่าสุด เรียงจากเก่าไปใหม่: {{list}}"
+  },
+  "account": {
+    "title": "บัญชี"
+  },
+  "notFound": {
+    "title": "ไม่พบหน้านี้",
+    "message": "เราไม่พบหน้าที่คุณต้องการ",
+    "matchTitle": "ไม่พบแมตช์",
+    "matchMessage": "ไม่มีแมตช์นี้ หรือไม่ได้อยู่ในลีกที่เรารองรับ",
+    "teamTitle": "ไม่พบทีม",
+    "teamMessage": "ไม่มีทีมนี้",
+    "todaysMatches": "แมตช์วันนี้",
+    "leagues": "ลีก"
+  },
+  "errors": {
+    "generic": "เกิดข้อผิดพลาดบางอย่าง โปรดลองอีกครั้งในอีกสักครู่",
+    "network": "เชื่อมต่อเซิร์ฟเวอร์ไม่ได้ โปรดตรวจสอบอินเทอร์เน็ตแล้วลองใหม่",
+    "NOT_LOGGED_IN": "ยังไม่ได้เข้าสู่ระบบ",
+    "SESSION_EXPIRED": "เซสชันหมดอายุ โปรดเข้าสู่ระบบอีกครั้ง",
+    "INVALID_CREDENTIALS": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "EMAIL_TAKEN": "มีบัญชีที่ใช้อีเมลนี้อยู่แล้ว",
+    "VALIDATION": "โปรดตรวจสอบข้อมูลที่กรอก",
+    "INVALID_MATCH_ID": "รหัสแมตช์ไม่ถูกต้อง",
+    "INVALID_TEAM_ID": "รหัสทีมไม่ถูกต้อง",
+    "INVALID_DATE": "วันที่ไม่ถูกต้อง",
+    "INVALID_TIMEZONE": "เขตเวลาไม่ถูกต้อง",
+    "UNSUPPORTED_LEAGUE": "ไม่รองรับลีกนี้",
+    "MATCH_NOT_FOUND": "ไม่พบแมตช์",
+    "TEAM_NOT_FOUND": "ไม่พบทีม",
+    "FAVORITES_LIMIT": "ติดตามได้สูงสุด {{max}} ทีม โปรดเลิกติดตามทีมหนึ่งก่อน",
+    "INVALID_BODY": "ข้อมูลที่ส่งมาไม่ถูกต้อง",
+    "UPSTREAM_ERROR": "ดึงข้อมูลจากแหล่งข้อมูลฟุตบอลไม่ได้ โปรดลองอีกครั้งในอีกสักครู่",
+    "SERVER_ERROR": "เซิร์ฟเวอร์มีปัญหา โปรดลองอีกครั้งในอีกสักครู่",
+    "rateLimited": {
+      "api": "มีคำขอมากเกินไป",
+      "quota": "คุณโหลดข้อมูลเร็วเกินไป",
+      "strict": "คุณเปิดแมตช์และทีมมากเกินไป",
+      "loginAccount": "เข้าสู่ระบบบัญชีนี้ไม่สำเร็จหลายครั้งเกินไป",
+      "loginIp": "เข้าสู่ระบบไม่สำเร็จหลายครั้งเกินไป",
+      "register": "สร้างบัญชีจากการเชื่อมต่อนี้มากเกินไป",
+      "retry_other": "ลองใหม่อีกครั้งใน {{count}} นาที"
+    }
+  },
+  "validation": {
+    "invalid_email": "กรอกอีเมลให้ถูกต้อง",
+    "name_required": "กรุณากรอกชื่อ",
+    "name_too_long": "ชื่อยาวเกินไป",
+    "password_too_short": "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร",
+    "password_too_long": "รหัสผ่านยาวเกินไป",
+    "password_required": "กรุณากรอกรหัสผ่าน",
+    "email_taken": "ลงทะเบียนแล้ว",
+    "invalid_language": "ไม่รองรับภาษานี้"
+  }
+}

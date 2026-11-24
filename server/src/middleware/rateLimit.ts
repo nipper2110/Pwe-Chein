@@ -1,11 +1,14 @@
 import type { Request } from "express";
 import { ipKeyGenerator, rateLimit } from "express-rate-limit";
+import { sendError } from "../utils/httpError.js";
 
 // Counters live in this server's memory: they reset when the server restarts or Render's free
 // instance goes to sleep. That is fine for one instance. With several instances we would need a shared store.
 const MINUTE = 60 * 1000;
 
 interface LimiterOptions {
+  /** Which limiter fired. The browser picks its translated message by this name. */
+  scope: "api" | "quota" | "strict" | "loginAccount" | "loginIp" | "register";
   windowMs: number;
   limit: number;
   /** Shown to the user, followed by how long to wait. */
@@ -16,7 +19,7 @@ interface LimiterOptions {
   key?: (req: Request) => string;
 }
 
-function limiter({ windowMs, limit, message, onlyFailures = false, key }: LimiterOptions) {
+function limiter({ scope, windowMs, limit, message, onlyFailures = false, key }: LimiterOptions) {
   return rateLimit({
     windowMs,
     limit,
@@ -27,7 +30,7 @@ function limiter({ windowMs, limit, message, onlyFailures = false, key }: Limite
     handler: (_req, res) => {
       const seconds = Number(res.getHeader("Retry-After") ?? Math.ceil(windowMs / 1000));
       const minutes = Math.max(1, Math.ceil(seconds / 60));
-      res.status(429).json({ error: `${message} Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.` });
+      sendError(res, 429, "RATE_LIMITED", `${message} Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.`, { scope, retryAfterMinutes: minutes });
     },
   });
 }
@@ -41,6 +44,7 @@ const ipAndEmail = (req: Request): string => {
 
 /** Every /api route: a generous ceiling that normal browsing never reaches. */
 export const apiLimiter = limiter({
+  scope: "api",
   windowMs: 15 * MINUTE,
   limit: 300,
   message: "Too many requests.",
@@ -48,6 +52,7 @@ export const apiLimiter = limiter({
 
 /** Routes that can spend our 100 daily API-Football requests on data we have not cached yet. */
 export const quotaLimiter = limiter({
+  scope: "quota",
   windowMs: 15 * MINUTE,
   limit: 60,
   message: "You are loading data too fast.",
@@ -55,6 +60,7 @@ export const quotaLimiter = limiter({
 
 /** The costliest ones: any match id, team id or followed team can be a brand-new API request. */
 export const strictLimiter = limiter({
+  scope: "strict",
   windowMs: 15 * MINUTE,
   limit: 40,
   message: "You are opening too many matches and teams.",
@@ -62,6 +68,7 @@ export const strictLimiter = limiter({
 
 /** Login: 5 wrong passwords per account per 15 minutes... */
 export const loginAccountLimiter = limiter({
+  scope: "loginAccount",
   windowMs: 15 * MINUTE,
   limit: 5,
   message: "Too many failed logins for this account.",
@@ -71,6 +78,7 @@ export const loginAccountLimiter = limiter({
 
 /** ...and 20 failed logins per visitor in total, so trying many different emails does not help either. */
 export const loginIpLimiter = limiter({
+  scope: "loginIp",
   windowMs: 15 * MINUTE,
   limit: 20,
   message: "Too many failed logins.",
@@ -79,6 +87,7 @@ export const loginIpLimiter = limiter({
 
 /** Sign-up: accounts cost CPU (bcrypt) and database space. */
 export const registerLimiter = limiter({
+  scope: "register",
   windowMs: 60 * MINUTE,
   limit: 5,
   message: "Too many accounts created from this connection.",

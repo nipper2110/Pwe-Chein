@@ -3,6 +3,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { ApiError } from './api/http'
+import './i18n' // starts i18next (language detection and translations) before anything renders
 import App from './App.tsx'
 import './index.css'
 

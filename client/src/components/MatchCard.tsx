@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { useFormat } from '../hooks/useFormat'
+import { useLabels } from '../hooks/useLabels'
 import type { Fixture, Team } from '../types/fixture'
-import { formatKickoff } from '../utils/dates'
 import { isFinished, isLive, isNotStarted } from '../utils/fixtureStatus'
 import { resultFor } from '../utils/results'
 import LeagueLogo from './LeagueLogo'
@@ -25,9 +27,9 @@ function TeamName({ team, align, role }: TeamNameProps) {
 
 // Left edge colour on a team's page. Amber for losses, because red is only for live/goals.
 const RESULT_STYLE = {
-  W: { border: 'border-l-pitch', label: 'Win' },
-  D: { border: 'border-l-slate-500', label: 'Draw' },
-  L: { border: 'border-l-amber-500', label: 'Loss' },
+  W: { border: 'border-l-pitch', label: 'results.win' },
+  D: { border: 'border-l-slate-500', label: 'results.draw' },
+  L: { border: 'border-l-amber-500', label: 'results.loss' },
 } as const
 
 const roleOf = (teamId: number, ownId: number | undefined): TeamNameProps['role'] =>
@@ -44,6 +46,9 @@ interface Props {
 }
 
 export default function MatchCard({ match, showDate = false, resultForTeamId, showCompetition = false }: Props) {
+  const { t } = useTranslation()
+  const format = useFormat()
+  const labels = useLabels()
   const { status } = match.fixture
   const live = isLive(match)
   const result = resultForTeamId ? resultFor(resultForTeamId, match) : null
@@ -68,11 +73,11 @@ export default function MatchCard({ match, showDate = false, resultForTeamId, sh
         <div className={`flex shrink-0 flex-col items-center gap-1 ${showDate ? 'w-24' : 'w-20'}`}>
           {showDate && (
             <span className="whitespace-nowrap text-[10px] text-slate-400">
-              {new Date(match.fixture.date).toLocaleDateString([], { day: 'numeric', month: 'short', year: 'numeric' })}
+              {format.date(match.fixture.date, { day: 'numeric', month: 'short', year: 'numeric' })}
             </span>
           )}
           {isNotStarted(match) ? (
-            <span className="font-mono text-sm text-slate-300">{formatKickoff(match.fixture.date)}</span>
+            <span className="font-mono text-sm text-slate-300">{format.time(match.fixture.date)}</span>
           ) : (
             <span className={`font-mono text-lg font-bold ${live ? 'text-live-text' : ''}`}>
               {match.goals.home ?? 0} - {match.goals.away ?? 0}
@@ -80,9 +85,11 @@ export default function MatchCard({ match, showDate = false, resultForTeamId, sh
           )}
           {live && <LiveBadge minute={status.elapsed} />}
           {!live && !isNotStarted(match) && (
-            <span className="text-[10px] uppercase text-slate-400">{isFinished(match) ? 'FT' : status.long}</span>
+            <span className="text-[10px] uppercase text-slate-400">
+              {isFinished(match) ? t('timeline.FT') : labels.status(status)}
+            </span>
           )}
-          {style && <span className="sr-only">{style.label}</span>}
+          {style && <span className="sr-only">{t(style.label)}</span>}
         </div>
 
         <TeamName team={match.teams.away} align="right" role={roleOf(match.teams.away.id, resultForTeamId)} />

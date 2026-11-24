@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next'
 import type { MatchDetail } from '../types/match'
 import EmptyState from './EmptyState'
 import TeamLineup from './TeamLineup'
 
 export default function LineupsView({ match }: { match: MatchDetail }) {
-  if (match.lineups.length === 0) return <EmptyState text="Lineups are not announced yet. They usually appear about an hour before kick-off." />
+  const { t } = useTranslation()
+  if (match.lineups.length === 0) return <EmptyState text={t('match.noLineups')} />
 
   return (
     <div className="grid gap-4 sm:grid-cols-2">

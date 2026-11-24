@@ -1,4 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
+import { UpstreamError, sendError } from "../utils/httpError.js";
 
 // Errors thrown by Express's body parser (e.g. broken JSON) carry a 4xx `status`.
 function clientErrorStatus(err: unknown): number | null {
@@ -14,10 +15,15 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   const clientStatus = clientErrorStatus(err);
   if (clientStatus) {
     // The caller's mistake: give a short message, not the parser's internal one.
-    res.status(clientStatus).json({ error: "Invalid request body" });
+    sendError(res, clientStatus, "INVALID_BODY", "Invalid request body");
     return;
   }
-  const message = err instanceof Error ? err.message : "Unknown error";
-  console.error("[error]", message);
-  res.status(500).json({ error: message });
+  // The real reason goes to our logs only. Browsers get a generic message, so internal details
+  // (database or upstream API errors) are never leaked.
+  console.error("[error]", err instanceof Error ? err.message : "Unknown error");
+  if (err instanceof UpstreamError) {
+    sendError(res, 502, "UPSTREAM_ERROR", "Could not load data from the football data provider");
+    return;
+  }
+  sendError(res, 500, "SERVER_ERROR", "Server error");
 }

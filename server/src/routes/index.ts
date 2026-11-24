@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { login, logout, me, register } from "../controllers/authController.js";
+import { login, logout, me, register, setLanguage } from "../controllers/authController.js";
 import { followTeam, listFavorites, unfollowTeam } from "../controllers/favoritesController.js";
 import { fixturesByDate, liveFixtures } from "../controllers/fixturesController.js";
 import { standings, topScorers } from "../controllers/leaguesController.js";
@@ -23,6 +23,7 @@ router.post("/auth/register", registerLimiter, register);
 router.post("/auth/login", loginIpLimiter, loginAccountLimiter, login);
 router.post("/auth/logout", logout);
 router.get("/auth/me", requireAuth, me);
+router.put("/auth/language", requireAuth, setLanguage);
 router.get("/favorites", requireAuth, listFavorites);
 // Following an unknown team looks it up in API-Football, so it is limited like the team page.
 router.put("/favorites/:teamId", requireAuth, strictLimiter, followTeam);

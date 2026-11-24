@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Navigate, useParams } from 'react-router-dom'
 import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
@@ -20,12 +21,13 @@ export default function League() {
 }
 
 function LeagueView({ leagueId }: { leagueId: number }) {
+  const { t } = useTranslation()
   const standings = useStandings(leagueId)
   const scorers = useTopScorers(leagueId)
   const league = LEAGUES.find((l) => l.id === leagueId)
   usePageMeta({
-    title: `${league?.name} Standings & Top Scorers`,
-    description: `${league?.name} table with form and zones, plus the top scorers.`,
+    title: t('league.metaTitle', { name: league?.name }),
+    description: t('league.metaDescription', { name: league?.name }),
   })
 
   return (
@@ -39,10 +41,10 @@ function LeagueView({ leagueId }: { leagueId: number }) {
       </div>
 
       <section aria-labelledby="standings-title" className="space-y-2">
-        <h2 id="standings-title" className="font-semibold">Standings</h2>
+        <h2 id="standings-title" className="font-semibold">{t('league.standings')}</h2>
         {standings.isPending && <TableSkeleton />}
-        {standings.isError && <ErrorState message={standings.error.message} onRetry={() => void standings.refetch()} />}
-        {standings.isSuccess && standings.data.length === 0 && <EmptyState text="No standings available yet." />}
+        {standings.isError && <ErrorState error={standings.error} onRetry={() => void standings.refetch()} />}
+        {standings.isSuccess && standings.data.length === 0 && <EmptyState text={t('league.noStandings')} />}
         {standings.isSuccess &&
           standings.data.map((group, i) => (
             <div key={group[0]?.group ?? i} className="space-y-1">
@@ -53,10 +55,10 @@ function LeagueView({ leagueId }: { leagueId: number }) {
       </section>
 
       <section aria-labelledby="scorers-title" className="space-y-2">
-        <h2 id="scorers-title" className="font-semibold">Top scorers</h2>
+        <h2 id="scorers-title" className="font-semibold">{t('league.topScorers')}</h2>
         {scorers.isPending && <TableSkeleton rows={6} />}
-        {scorers.isError && <ErrorState message={scorers.error.message} onRetry={() => void scorers.refetch()} />}
-        {scorers.isSuccess && scorers.data.length === 0 && <EmptyState text="No scorers available yet." />}
+        {scorers.isError && <ErrorState error={scorers.error} onRetry={() => void scorers.refetch()} />}
+        {scorers.isSuccess && scorers.data.length === 0 && <EmptyState text={t('league.noScorers')} />}
         {scorers.isSuccess && scorers.data.length > 0 && <TopScorersList scorers={scorers.data} />}
       </section>
     </PageLayout>

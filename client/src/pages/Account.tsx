@@ -1,6 +1,8 @@
 import { LogOut, Moon, Star, Sun } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import Avatar from '../components/Avatar'
+import LanguagePicker from '../components/LanguagePicker'
 import PageLayout from '../components/PageLayout'
 import TableSkeleton from '../components/TableSkeleton'
 import { useLogout, useUser } from '../hooks/useAuth'
@@ -12,16 +14,17 @@ const ROW =
 
 /** The "Account" tab on phones: who you are, the theme switch, and log out (or log in / sign up). */
 export default function Account() {
-  usePageMeta({ title: 'Account', noindex: true })
+  const { t } = useTranslation()
+  usePageMeta({ title: t('account.title'), noindex: true })
   const user = useUser()
   const logout = useLogout()
   const { theme, toggle } = useTheme()
-  const next = theme === 'dark' ? 'light' : 'dark'
+  const themeLabel = theme === 'dark' ? t('theme.toLight') : t('theme.toDark')
   const ThemeIcon = theme === 'dark' ? Sun : Moon
 
   return (
     <PageLayout>
-      <h1 className="text-xl font-bold">Account</h1>
+      <h1 className="text-xl font-bold">{t('account.title')}</h1>
 
       {user.isPending && <TableSkeleton rows={3} />}
 
@@ -37,17 +40,19 @@ export default function Account() {
 
       {user.isSuccess && !user.data && (
         <div className="space-y-3 rounded-xl bg-surface p-6 text-center">
-          <p className="text-sm text-slate-400">Log in to follow teams and see their matches.</p>
+          <p className="text-sm text-slate-400">{t('auth.loginToFollow')}</p>
           <div className="flex justify-center gap-2">
             <Link to="/login" className="rounded-full bg-pitch px-5 py-2 text-sm font-semibold text-on-pitch">
-              Log in
+              {t('auth.login')}
             </Link>
             <Link to="/register" className="rounded-full bg-slate-800 px-5 py-2 text-sm font-medium text-slate-300 hover:text-white">
-              Sign up
+              {t('auth.signup')}
             </Link>
           </div>
         </div>
       )}
+
+      {!user.isPending && <LanguagePicker />}
 
       {!user.isPending && (
         <ul className="space-y-2">
@@ -55,21 +60,21 @@ export default function Account() {
             <li>
               <Link to="/dashboard" className={ROW}>
                 <Star size={18} aria-hidden="true" />
-                My teams
+                {t('nav.myTeams')}
               </Link>
             </li>
           )}
           <li>
             <button type="button" onClick={toggle} className={ROW}>
               <ThemeIcon size={18} aria-hidden="true" />
-              Switch to {next} theme
+              {themeLabel}
             </button>
           </li>
           {user.data && (
             <li>
               <button type="button" onClick={() => logout.mutate()} disabled={logout.isPending} className={ROW}>
                 <LogOut size={18} aria-hidden="true" />
-                Log out
+                {t('auth.logout')}
               </button>
             </li>
           )}

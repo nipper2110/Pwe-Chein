@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { LEAGUES, leagueLogo } from '../utils/leagues'
 import LeagueLogo from './LeagueLogo'
 
 export default function LeagueSwitcher({ activeId }: { activeId: number }) {
+  const { t } = useTranslation()
   const scrollRef = useRef<HTMLElement>(null)
   const [canScrollMore, setCanScrollMore] = useState(false)
 
@@ -25,7 +27,7 @@ export default function LeagueSwitcher({ activeId }: { activeId: number }) {
       <nav
         ref={scrollRef}
         onScroll={update}
-        aria-label="Choose league"
+        aria-label={t('league.choose')}
         className="-mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1 md:mx-0 md:flex-wrap md:overflow-visible md:px-0"
       >
         {LEAGUES.map((l) => (

@@ -1,0 +1,285 @@
+{
+  "common": {
+    "tryAgain": "Try again",
+    "somethingWrong": "Something went wrong",
+    "loading": "Loading",
+    "loadingMatches": "Loading matches"
+  },
+  "nav": {
+    "matches": "Matches",
+    "leagues": "Leagues",
+    "myTeams": "My teams",
+    "account": "Account",
+    "main": "Main",
+    "mobile": "Mobile",
+    "skip": "Skip to content"
+  },
+  "theme": {
+    "toLight": "Switch to light theme",
+    "toDark": "Switch to dark theme"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "auth": {
+    "login": "Log in",
+    "signup": "Sign up",
+    "logout": "Log out",
+    "loggingIn": "Logging in…",
+    "creatingAccount": "Creating account…",
+    "createTitle": "Create your account",
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "passwordHint": "At least 8 characters.",
+    "newHere": "New here?",
+    "createLink": "Create an account",
+    "haveAccount": "Already have an account?",
+    "menuFor": "Account menu for {{name}}",
+    "menuLabel": "Account",
+    "welcomeBack": "Welcome back, {{name}}",
+    "loginToFollow": "Log in to follow teams and see their matches."
+  },
+  "live": {
+    "now": "Live now",
+    "badge": "Live"
+  },
+  "date": {
+    "yesterday": "Yesterday",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "chooseDay": "Choose day"
+  },
+  "season": {
+    "label": "Season {{years}}"
+  },
+  "home": {
+    "metaTitle": "Today's Football Fixtures & Live Scores",
+    "metaDescription": "Live scores and fixtures for the Premier League, La Liga, Serie A, Bundesliga, Ligue 1 and Champions League, grouped by league in your time zone.",
+    "heading": "Live football scores and fixtures",
+    "seasonNote": "Standings and top scorers use this season (free API plan limit).",
+    "noMatches": "No matches in our 6 leagues on this day."
+  },
+  "league": {
+    "metaTitle": "{{name}} Standings & Top Scorers",
+    "metaDescription": "{{name}} table with form and zones, plus the top scorers.",
+    "standings": "Standings",
+    "topScorers": "Top scorers",
+    "noStandings": "No standings available yet.",
+    "noScorers": "No scorers available yet.",
+    "choose": "Choose league",
+    "goals": "Goals",
+    "assists_one": "{{count}} assist",
+    "assists_other": "{{count}} assists"
+  },
+  "standings": {
+    "caption": "League standings",
+    "team": "Team",
+    "pShort": "P",
+    "wShort": "W",
+    "dShort": "D",
+    "lShort": "L",
+    "gdShort": "GD",
+    "formShort": "Form",
+    "ptsShort": "Pts",
+    "played": "Played",
+    "won": "Won",
+    "drawn": "Drawn",
+    "lost": "Lost",
+    "goalDifference": "Goal difference",
+    "form": "Last 5 results, oldest to most recent",
+    "points": "Points",
+    "legend": "Table colours"
+  },
+  "zones": {
+    "relegation": "Relegation"
+  },
+  "match": {
+    "backToAll": "All matches",
+    "tablist": "Match details",
+    "tabEvents": "Events",
+    "tabLineups": "Lineups",
+    "tabStats": "Statistics",
+    "versus": "{{home}} vs {{away}}",
+    "metaTitleFallback": "Match",
+    "metaDescription": "{{home}} vs {{away}} ({{league}}): score, events, lineups and statistics.",
+    "referee": "Referee: {{name}}",
+    "fullTime": "Full time",
+    "noEvents": "No events yet. They appear once the match starts.",
+    "noLineups": "Lineups are not announced yet. They usually appear about an hour before kick-off.",
+    "noStats": "Statistics are not available for this match yet.",
+    "coach": "Coach: {{name}}",
+    "startingXI": "Starting XI",
+    "substitutes": "Substitutes",
+    "assist": "assist: {{name}}",
+    "substitution": "Substitution"
+  },
+  "events": {
+    "normalGoal": "Goal",
+    "ownGoal": "Own goal",
+    "penalty": "Penalty",
+    "missedPenalty": "Missed penalty",
+    "yellowCard": "Yellow card",
+    "redCard": "Red card",
+    "secondYellow": "Second yellow card",
+    "goalCancelled": "Goal cancelled",
+    "penaltyConfirmed": "Penalty confirmed",
+    "cardUpgrade": "Card upgrade",
+    "var": "VAR"
+  },
+  "timeline": {
+    "HT": "HT",
+    "FT": "FT",
+    "AET": "AET",
+    "PEN": "PEN"
+  },
+  "stats": {
+    "possession": "Possession",
+    "expectedGoals": "Expected goals (xG)",
+    "goalsPrevented": "Goals prevented",
+    "totalShots": "Total shots",
+    "shotsOnTarget": "Shots on target",
+    "shotsOffTarget": "Shots off target",
+    "shotsInsideBox": "Shots inside box",
+    "shotsOutsideBox": "Shots outside box",
+    "blockedShots": "Blocked shots",
+    "cornerKicks": "Corner kicks",
+    "offsides": "Offsides",
+    "fouls": "Fouls",
+    "yellowCards": "Yellow cards",
+    "redCards": "Red cards",
+    "goalkeeperSaves": "Goalkeeper saves",
+    "totalPasses": "Total passes",
+    "accuratePasses": "Accurate passes",
+    "passAccuracy": "Pass accuracy",
+    "freeKicks": "Free kicks",
+    "barLabel": "{{label}}: {{home}} to {{away}}"
+  },
+  "status": {
+    "NS": "Not started",
+    "TBD": "Time to be defined",
+    "1H": "First half",
+    "HT": "Half time",
+    "2H": "Second half",
+    "ET": "Extra time",
+    "BT": "Break before extra time",
+    "P": "Penalty shootout",
+    "SUSP": "Suspended",
+    "INT": "Interrupted",
+    "FT": "Full time",
+    "AET": "Finished after extra time",
+    "PEN": "Finished after penalties",
+    "PST": "Postponed",
+    "CANC": "Cancelled",
+    "ABD": "Abandoned",
+    "AWD": "Awarded",
+    "WO": "Walkover",
+    "LIVE": "Live"
+  },
+  "round": {
+    "regularSeason": "Regular season - {{n}}",
+    "leagueStage": "League stage - {{n}}",
+    "groupStage": "Group stage - {{n}}"
+  },
+  "team": {
+    "backToLeagues": "Leagues",
+    "seasonNote": "Results and stats come from this season (free API plan limit).",
+    "metaTitleFallback": "Team",
+    "metaDescription": "{{name}}: season summary, recent results and stats for the {{years}} season.",
+    "recentResults": "Recent results",
+    "last5": "Last 5 matches",
+    "nextFixtures": "Next fixtures",
+    "upcoming": "Upcoming",
+    "noResults": "No results found for this season.",
+    "country": "Country",
+    "founded": "Founded",
+    "stadium": "Stadium",
+    "capacity": "Capacity",
+    "summaryTitle": "Season summary",
+    "played": "Played",
+    "won": "Won",
+    "drawn": "Drawn",
+    "lost": "Lost",
+    "goalsForAgainst": "Goals for - against",
+    "difference": "{{value}} difference",
+    "cleanSheets": "Clean sheets",
+    "topFormation": "Top formation",
+    "usedIn_one": "used in {{count}} match",
+    "usedIn_other": "used in {{count}} matches"
+  },
+  "follow": {
+    "follow": "Follow",
+    "following": "Following",
+    "unfollow": "Unfollow",
+    "followTeam": "Follow {{name}}",
+    "unfollowTeam": "Unfollow {{name}}"
+  },
+  "dashboard": {
+    "title": "My teams",
+    "none": "You are not following any teams yet.",
+    "find": "Find a team",
+    "hint": "Open a league, click a team, and press Follow.",
+    "teamsYouFollow": "Teams you follow",
+    "yourMatches": "Your teams' matches",
+    "noneThisWeek": "None of your teams play from yesterday to tomorrow."
+  },
+  "results": {
+    "win": "Win",
+    "draw": "Draw",
+    "loss": "Loss",
+    "formAria": "Last results, oldest to latest: {{list}}"
+  },
+  "account": {
+    "title": "Account"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "We couldn't find what you were looking for.",
+    "matchTitle": "Match not found",
+    "matchMessage": "That match doesn't exist or isn't in one of our leagues.",
+    "teamTitle": "Team not found",
+    "teamMessage": "That team doesn't exist.",
+    "todaysMatches": "Today's matches",
+    "leagues": "Leagues"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again in a moment.",
+    "network": "Can't reach the server. Check your connection and try again.",
+    "NOT_LOGGED_IN": "You are not logged in.",
+    "SESSION_EXPIRED": "Your session expired. Please log in again.",
+    "INVALID_CREDENTIALS": "Wrong email or password.",
+    "EMAIL_TAKEN": "An account with this email already exists.",
+    "VALIDATION": "Please check the details you entered.",
+    "INVALID_MATCH_ID": "That match number is not valid.",
+    "INVALID_TEAM_ID": "That team number is not valid.",
+    "INVALID_DATE": "That date is not valid.",
+    "INVALID_TIMEZONE": "That time zone is not valid.",
+    "UNSUPPORTED_LEAGUE": "That league is not supported.",
+    "MATCH_NOT_FOUND": "Match not found.",
+    "TEAM_NOT_FOUND": "Team not found.",
+    "FAVORITES_LIMIT": "You can follow up to {{max}} teams. Unfollow one first.",
+    "INVALID_BODY": "The request was not valid.",
+    "UPSTREAM_ERROR": "Couldn't load data from the football data provider. Please try again in a moment.",
+    "SERVER_ERROR": "The server had a problem. Please try again in a moment.",
+    "rateLimited": {
+      "api": "Too many requests.",
+      "quota": "You are loading data too fast.",
+      "strict": "You are opening too many matches and teams.",
+      "loginAccount": "Too many failed logins for this account.",
+      "loginIp": "Too many failed logins.",
+      "register": "Too many accounts created from this connection.",
+      "retry_one": "Try again in {{count}} minute.",
+      "retry_other": "Try again in {{count}} minutes."
+    }
+  },
+  "validation": {
+    "invalid_email": "Enter a valid email",
+    "name_required": "Name is required",
+    "name_too_long": "Name is too long",
+    "password_too_short": "Password must be at least 8 characters",
+    "password_too_long": "Password is too long",
+    "password_required": "Password is required",
+    "email_taken": "Already registered",
+    "invalid_language": "That language is not supported"
+  }
+}

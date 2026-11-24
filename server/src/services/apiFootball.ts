@@ -1,6 +1,7 @@
 import { config } from "../config.js";
 import { CacheEntry } from "../models/CacheEntry.js";
-import { todayIn } from "../utils/timezone.js";
+import { UpstreamError } from "../utils/httpError.js";
+import { todayIn, toApiTimeZone } from "../utils/timezone.js";
 
 const BASE_URL = "https://v3.football.api-sports.io";
 
@@ -54,11 +55,11 @@ async function callApi<T>(endpoint: string, query: string): Promise<ApiEnvelope<
   const res = await fetch(`${BASE_URL}${endpoint}${query}`, {
     headers: { "x-apisports-key": config.API_FOOTBALL_KEY },
   });
-  if (!res.ok) throw new Error(`API-Football ${endpoint} responded with HTTP ${res.status}`);
+  if (!res.ok) throw new UpstreamError(`API-Football ${endpoint} responded with HTTP ${res.status}`);
 
   const body = (await res.json()) as ApiEnvelope<T>;
   if (hasApiErrors(body.errors)) {
-    throw new Error(`API-Football error on ${endpoint}: ${JSON.stringify(body.errors)}`);
+    throw new UpstreamError(`API-Football error on ${endpoint}: ${JSON.stringify(body.errors)}`);
   }
   return body;
 }
@@ -188,7 +189,8 @@ export function fixturesTtl(date: string, fixtures: Fixture[], timezone: string,
  * "2026-11-24 in Asia/Yangon" and "2026-11-24 in UTC" are different lists of matches.
  */
 export async function getFixturesByDate(date: string, timezone: string): Promise<Fixture[]> {
-  const all = await cachedFetch<Fixture[]>("/fixtures", { date, timezone }, (data) => fixturesTtl(date, data, timezone));
+  // The API (and the cache key) get the spelling API-Football knows; our own "today" logic keeps the browser's name.
+  const all = await cachedFetch<Fixture[]>("/fixtures", { date, timezone: toApiTimeZone(timezone) }, (data) => fixturesTtl(date, data, timezone));
   return onlySupported(all);
 }
 

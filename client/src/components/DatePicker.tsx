@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { addDays, toISODate } from '../utils/dates'
 
 interface Props {
@@ -7,15 +8,16 @@ interface Props {
 }
 
 export default function DatePicker({ value, now, onChange }: Props) {
+  const { t } = useTranslation()
   const today = new Date(now)
   const options = [
-    { label: 'Yesterday', date: toISODate(addDays(today, -1)) },
-    { label: 'Today', date: toISODate(today) },
-    { label: 'Tomorrow', date: toISODate(addDays(today, 1)) },
+    { label: t('date.yesterday'), date: toISODate(addDays(today, -1)) },
+    { label: t('date.today'), date: toISODate(today) },
+    { label: t('date.tomorrow'), date: toISODate(addDays(today, 1)) },
   ]
 
   return (
-    <div className="flex gap-2" role="group" aria-label="Choose day">
+    <div className="flex gap-2" role="group" aria-label={t('date.chooseDay')}>
       {options.map((o) => (
         <button
           key={o.date}

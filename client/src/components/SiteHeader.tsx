@@ -1,8 +1,10 @@
 import { Star, Trophy } from 'lucide-react'
 import type { ComponentType } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, NavLink } from 'react-router-dom'
 import { useUser } from '../hooks/useAuth'
 import BrandMark from './BrandMark'
+import LanguageSelect from './LanguageSelect'
 import PixelBallIcon from './PixelBallIcon'
 import ThemeToggle from './ThemeToggle'
 import UserMenu from './UserMenu'
@@ -10,10 +12,10 @@ import UserMenu from './UserMenu'
 // Lucide icons and our pixel ball all accept a `size`, so they fit the same slot.
 type NavIcon = ComponentType<{ size?: number; 'aria-hidden'?: boolean }>
 
-const NAV: { to: string; label: string; icon: NavIcon; end?: boolean }[] = [
-  { to: '/', label: 'Matches', icon: PixelBallIcon, end: true },
-  { to: '/league', label: 'Leagues', icon: Trophy },
-  { to: '/dashboard', label: 'My teams', icon: Star },
+const NAV: { to: string; label: 'nav.matches' | 'nav.leagues' | 'nav.myTeams'; icon: NavIcon; end?: boolean }[] = [
+  { to: '/', label: 'nav.matches', icon: PixelBallIcon, end: true },
+  { to: '/league', label: 'nav.leagues', icon: Trophy },
+  { to: '/dashboard', label: 'nav.myTeams', icon: Star },
 ]
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
@@ -26,21 +28,22 @@ const navClass = ({ isActive }: { isActive: boolean }) =>
  * Mobile (below md): just the logo and the account area; navigation moves to the bottom tab bar.
  */
 export default function SiteHeader() {
+  const { t } = useTranslation()
   const user = useUser()
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-800 bg-surface/85 backdrop-blur-md">
-      <div className="mx-auto flex h-14 max-w-4xl items-center gap-3 px-4">
+      <div className="mx-auto flex h-14 max-w-5xl items-center gap-3 px-4">
         <Link to="/" className="shrink-0 rounded-md">
           <BrandMark />
         </Link>
 
         {/* Sits next to the logo (not centred), so it never shifts when the right side changes. */}
-        <nav aria-label="Main" className="ml-3 hidden items-center gap-1 md:flex">
+        <nav aria-label={t('nav.main')} className="ml-3 hidden items-center gap-1 md:flex">
           {NAV.map(({ to, label, icon: Icon, end }) => (
             <NavLink key={to} to={to} end={end} className={navClass}>
               <Icon size={16} aria-hidden={true} />
-              {label}
+              {t(label)}
             </NavLink>
           ))}
         </nav>
@@ -54,14 +57,17 @@ export default function SiteHeader() {
             // While we are still asking the server who is logged in, show nothing to avoid a flicker.
             user.isSuccess && (
               <>
+                {/* Logged-in users change language in the avatar menu or on the Account page. */}
+                <LanguageSelect />
+                {/* Below lg there is no room for Sign up here (Burmese words are long); the login page and Account tab link to it. */}
                 <Link to="/login" className="whitespace-nowrap rounded-full px-3 py-1.5 text-sm font-medium text-slate-300 hover:bg-slate-800 hover:text-white">
-                  Log in
+                  {t('auth.login')}
                 </Link>
                 <Link
                   to="/register"
-                  className="hidden whitespace-nowrap rounded-full bg-pitch px-3.5 py-1.5 text-sm font-semibold text-on-pitch md:inline-flex"
+                  className="hidden whitespace-nowrap rounded-full bg-pitch px-3.5 py-1.5 text-sm font-semibold text-on-pitch lg:inline-flex"
                 >
-                  Sign up
+                  {t('auth.signup')}
                 </Link>
               </>
             )

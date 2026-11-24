@@ -4,7 +4,8 @@ import { addDays, toISODate } from '../utils/dates'
 import { mayBeLiveSoon } from '../utils/fixtureStatus'
 
 export interface DayMatches {
-  label: string
+  /** Which day this is; the page turns it into a translated word. */
+  key: 'today' | 'tomorrow' | 'yesterday'
   date: string
   matches: Fixture[]
 }
@@ -22,9 +23,9 @@ const byKickoff = (a: Fixture, b: Fixture): number => a.fixture.date.localeCompa
 export function useFollowedMatches(teamIds: Set<number>, now: number) {
   const today = new Date(now)
   const days = [
-    { label: 'Today', date: toISODate(today) },
-    { label: 'Tomorrow', date: toISODate(addDays(today, 1)) },
-    { label: 'Yesterday', date: toISODate(addDays(today, -1)) },
+    { key: 'today' as const, date: toISODate(today) },
+    { key: 'tomorrow' as const, date: toISODate(addDays(today, 1)) },
+    { key: 'yesterday' as const, date: toISODate(addDays(today, -1)) },
   ]
   // Always the same 3 calls in the same order, as React requires.
   const queries = [useFixtures(days[0].date), useFixtures(days[1].date), useFixtures(days[2].date)]

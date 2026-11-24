@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import LanguageSync from './components/LanguageSync'
 import ProtectedRoute from './components/ProtectedRoute'
 import Account from './pages/Account'
 import Dashboard from './pages/Dashboard'
@@ -34,6 +36,7 @@ function RouteChangeEffects() {
 }
 
 function App() {
+  const { t } = useTranslation()
   return (
     <>
       {/* First thing a keyboard user can Tab to: jump past the header straight to the content. */}
@@ -41,9 +44,10 @@ function App() {
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-pitch focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-on-pitch"
       >
-        Skip to content
+        {t('nav.skip')}
       </a>
       <RouteChangeEffects />
+      <LanguageSync />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/league" element={<Navigate to={`/league/${DEFAULT_LEAGUE_ID}`} replace />} />

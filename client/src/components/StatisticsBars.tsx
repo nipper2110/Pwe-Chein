@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { MatchDetail } from '../types/match'
 import EmptyState from './EmptyState'
 import StatRow from './StatRow'
@@ -15,8 +16,9 @@ const rank = (type: string): number => {
 }
 
 export default function StatisticsBars({ match }: { match: MatchDetail }) {
+  const { t } = useTranslation()
   const [home, away] = [match.statistics[0], match.statistics[1]]
-  if (!home || !away) return <EmptyState text="Statistics are not available for this match yet." />
+  if (!home || !away) return <EmptyState text={t('match.noStats')} />
 
   const rows = [...home.statistics].sort((a, b) => rank(a.type) - rank(b.type))
 

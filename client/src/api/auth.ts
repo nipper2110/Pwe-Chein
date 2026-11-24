@@ -1,9 +1,13 @@
 import { ApiError, request } from './http'
 
+import type { Language } from '../i18n/languages'
+
 export interface User {
   id: string
   name: string
   email: string
+  /** The language saved in the profile, or null for accounts that never picked one. */
+  language: Language | null
 }
 
 export { ApiError }
@@ -18,7 +22,7 @@ export async function fetchMe(): Promise<User | null> {
   }
 }
 
-export const registerUser = async (input: { name: string; email: string; password: string }): Promise<User> =>
+export const registerUser = async (input: { name: string; email: string; password: string; language?: Language }): Promise<User> =>
   (await request<{ user: User }>('/api/auth/register', { method: 'POST', body: JSON.stringify(input) })).user
 
 export const loginUser = async (input: { email: string; password: string }): Promise<User> =>
@@ -27,3 +31,6 @@ export const loginUser = async (input: { email: string; password: string }): Pro
 export const logoutUser = async (): Promise<void> => {
   await request<{ ok: boolean }>('/api/auth/logout', { method: 'POST' })
 }
+
+export const saveLanguage = async (language: Language): Promise<User> =>
+  (await request<{ user: User }>('/api/auth/language', { method: 'PUT', body: JSON.stringify({ language }) })).user

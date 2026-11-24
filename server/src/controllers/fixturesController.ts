@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { getFixturesByDate, getLiveFixtures } from "../services/apiFootball.js";
+import { sendError } from "../utils/httpError.js";
 import { isValidTimeZone } from "../utils/timezone.js";
 
 const querySchema = z.object({
@@ -12,7 +13,8 @@ const querySchema = z.object({
 export async function fixturesByDate(req: Request, res: Response, next: NextFunction): Promise<void> {
   const parsed = querySchema.safeParse(req.query);
   if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.issues[0]?.message ?? "Invalid query" });
+    const issue = parsed.error.issues[0];
+    sendError(res, 400, issue?.path[0] === "timezone" ? "INVALID_TIMEZONE" : "INVALID_DATE", issue?.message ?? "Invalid query");
     return;
   }
   try {

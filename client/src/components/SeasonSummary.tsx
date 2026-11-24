@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { TeamSummary } from '../types/team'
 import LeagueLogo from './LeagueLogo'
 
@@ -21,31 +22,32 @@ function Tile({ label, value, hint, valueClass = '' }: TileProps) {
 }
 
 export default function SeasonSummary({ summary }: { summary: TeamSummary }) {
+  const { t } = useTranslation()
   const diff = summary.goalsFor - summary.goalsAgainst
 
   return (
     <section aria-labelledby="summary-title" className="space-y-3 rounded-xl bg-surface p-4">
       <h2 id="summary-title" className="flex items-center gap-2 font-semibold">
         <LeagueLogo src={summary.league.logo} />
-        Season summary
+        {t('team.summaryTitle')}
         <span className="text-xs font-normal text-slate-400">{summary.league.name}</span>
       </h2>
       <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <Tile label="Played" value={summary.played} />
+        <Tile label={t('team.played')} value={summary.played} />
         {/* Amber for losses, because red is only for live/goals. */}
-        <Tile label="Won" value={summary.wins} valueClass="text-pitch" />
-        <Tile label="Drawn" value={summary.draws} valueClass="text-slate-300" />
-        <Tile label="Lost" value={summary.losses} valueClass="text-amber-500" />
+        <Tile label={t('team.won')} value={summary.wins} valueClass="text-pitch" />
+        <Tile label={t('team.drawn')} value={summary.draws} valueClass="text-slate-300" />
+        <Tile label={t('team.lost')} value={summary.losses} valueClass="text-amber-500" />
         <Tile
-          label="Goals for - against"
+          label={t('team.goalsForAgainst')}
           value={`${summary.goalsFor} - ${summary.goalsAgainst}`}
-          hint={`${diff > 0 ? '+' : ''}${diff} difference`}
+          hint={t('team.difference', { value: `${diff > 0 ? '+' : ''}${diff}` })}
         />
-        <Tile label="Clean sheets" value={summary.cleanSheets} />
+        <Tile label={t('team.cleanSheets')} value={summary.cleanSheets} />
         <Tile
-          label="Top formation"
+          label={t('team.topFormation')}
           value={summary.formation ?? '–'}
-          hint={summary.formation ? `used in ${summary.formationPlayed} matches` : undefined}
+          hint={summary.formation ? t('team.usedIn', { count: summary.formationPlayed }) : undefined}
         />
       </dl>
     </section>

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { useLabels } from '../hooks/useLabels'
 import type { MatchEvent } from '../types/match'
 
 function minute(e: MatchEvent): string {
@@ -5,13 +7,17 @@ function minute(e: MatchEvent): string {
 }
 
 function EventIcon({ event }: { event: MatchEvent }) {
-  if (event.type === 'Goal') return <span title={event.detail}>⚽</span>
-  if (event.type === 'Card') return <span title={event.detail}>{event.detail.includes('Red') ? '🟥' : '🟨'}</span>
-  if (event.type === 'subst') return <span title="Substitution">🔁</span>
-  return <span title={event.detail}>📺</span> // VAR
+  const { t } = useTranslation()
+  const labels = useLabels()
+  if (event.type === 'Goal') return <span title={labels.eventDetail(event.detail)}>⚽</span>
+  if (event.type === 'Card') return <span title={labels.eventDetail(event.detail)}>{event.detail.includes('Red') ? '🟥' : '🟨'}</span>
+  if (event.type === 'subst') return <span title={t('match.substitution')}>🔁</span>
+  return <span title={t('events.var')}>📺</span> // VAR
 }
 
 function EventText({ event }: { event: MatchEvent }) {
+  const { t } = useTranslation()
+  const labels = useLabels()
   if (event.type === 'subst') {
     return (
       <span className="text-sm">
@@ -25,9 +31,9 @@ function EventText({ event }: { event: MatchEvent }) {
     <span className="text-sm">
       {event.player.name}
       {event.type === 'Goal' && event.assist.name && (
-        <span className="block text-xs text-slate-400">assist: {event.assist.name}</span>
+        <span className="block text-xs text-slate-400">{t('match.assist', { name: event.assist.name })}</span>
       )}
-      {note && <span className="block text-xs text-slate-400">{note}</span>}
+      {note && <span className="block text-xs text-slate-400">{labels.eventDetail(note)}</span>}
     </span>
   )
 }

@@ -1,4 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
+import { useErrorText } from '../hooks/useErrorText'
 import { useUser } from '../hooks/useAuth'
 import { useFavorites, useFollowTeam, useUnfollowTeam } from '../hooks/useFavorites'
 
@@ -11,6 +13,8 @@ const BASE = 'inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm 
 
 /** Star button: follow or unfollow a team. Logged-out visitors are sent to log in first. */
 export default function FollowButton({ teamId, teamName }: Props) {
+  const { t } = useTranslation()
+  const { errorText } = useErrorText()
   const user = useUser()
   const favorites = useFavorites()
   const follow = useFollowTeam()
@@ -21,7 +25,7 @@ export default function FollowButton({ teamId, teamName }: Props) {
   if (!user.data) {
     return (
       <Link to="/login" state={{ from: location.pathname }} className={`${BASE} bg-slate-800 text-slate-300 hover:text-white`}>
-        <span aria-hidden="true">☆</span> Follow
+        <span aria-hidden="true">☆</span> {t('follow.follow')}
       </Link>
     )
   }
@@ -35,7 +39,7 @@ export default function FollowButton({ teamId, teamName }: Props) {
       <button
         type="button"
         aria-pressed={following}
-        aria-label={following ? `Unfollow ${teamName}` : `Follow ${teamName}`}
+        aria-label={following ? t('follow.unfollowTeam', { name: teamName }) : t('follow.followTeam', { name: teamName })}
         disabled={busy}
         onClick={() => mutation.mutate(teamId)}
         className={`${BASE} disabled:opacity-60 ${
@@ -43,9 +47,9 @@ export default function FollowButton({ teamId, teamName }: Props) {
         }`}
       >
         <span aria-hidden="true">{following ? '★' : '☆'}</span>
-        {following ? 'Following' : 'Follow'}
+        {following ? t('follow.following') : t('follow.follow')}
       </button>
-      {mutation.isError && <p role="alert" className="text-xs text-amber-500">{mutation.error.message}</p>}
+      {mutation.isError && <p role="alert" className="text-xs text-amber-500">{errorText(mutation.error)}</p>}
     </div>
   )
 }

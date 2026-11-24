@@ -1,6 +1,9 @@
+import { useTranslation } from 'react-i18next'
+
 export default function MatchListSkeleton() {
+  const { t } = useTranslation()
   return (
-    <div className="space-y-4" role="status" aria-busy="true" aria-label="Loading matches">
+    <div className="space-y-4" role="status" aria-busy="true" aria-label={t('common.loadingMatches')}>
       {[0, 1].map((i) => (
         <div key={i} className="animate-pulse rounded-xl bg-surface p-4">
           <div className="mb-4 h-4 w-32 rounded bg-slate-800" />

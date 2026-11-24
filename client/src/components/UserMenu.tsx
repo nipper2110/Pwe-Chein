@@ -1,8 +1,11 @@
-import { ChevronDown, LogOut, Moon, Star, Sun } from 'lucide-react'
+import { Check, ChevronDown, LogOut, Moon, Star, Sun } from 'lucide-react'
 import { useEffect, useId, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import type { User } from '../api/auth'
 import { useLogout } from '../hooks/useAuth'
+import { useLanguage } from '../hooks/useLanguage'
+import { LANGUAGES } from '../i18n/languages'
 import { useTheme } from '../hooks/useTheme'
 import Avatar from './Avatar'
 
@@ -16,6 +19,8 @@ const ITEM =
  * - Escape closes it and puts focus back on the avatar. Tab and clicking elsewhere also close it.
  */
 export default function UserMenu({ user }: { user: User }) {
+  const { t } = useTranslation()
+  const { language, setLanguage } = useLanguage()
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -23,12 +28,12 @@ export default function UserMenu({ user }: { user: User }) {
   const menuId = useId()
   const logout = useLogout()
   const { theme, toggle: toggleTheme } = useTheme()
-  const nextTheme = theme === 'dark' ? 'light' : 'dark'
+  const themeLabel = theme === 'dark' ? t('theme.toLight') : t('theme.toDark')
   const ThemeIcon = theme === 'dark' ? Sun : Moon
 
   // Only items that are actually visible count (the theme item is hidden on desktop).
   const getItems = (): HTMLElement[] =>
-    Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []).filter((el) => el.offsetParent !== null)
+    Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"], [role="menuitemradio"]') ?? []).filter((el) => el.offsetParent !== null)
 
   // When the menu opens, focus the first item.
   useEffect(() => {
@@ -97,7 +102,7 @@ export default function UserMenu({ user }: { user: User }) {
       >
         <Avatar name={user.name} />
         {/* The button's name. (An aria-label would not match the visible initials, which breaks voice control.) */}
-        <span className="sr-only">Account menu for {user.name}</span>
+        <span className="sr-only">{t('auth.menuFor', { name: user.name })}</span>
         <ChevronDown
           size={14}
           aria-hidden="true"
@@ -117,10 +122,10 @@ export default function UserMenu({ user }: { user: User }) {
             <p className="truncate text-xs text-slate-400">{user.email}</p>
           </div>
           <div role="separator" className="my-1 h-px bg-slate-800" />
-          <div ref={menuRef} role="menu" aria-label="Account">
+          <div ref={menuRef} role="menu" aria-label={t('auth.menuLabel')}>
             <Link to="/dashboard" role="menuitem" tabIndex={-1} onClick={() => close(false)} className={ITEM}>
               <Star size={16} aria-hidden="true" />
-              My teams
+              {t('nav.myTeams')}
             </Link>
             {/* On desktop the theme button lives in the header; on mobile it is only here. */}
             <button
@@ -134,8 +139,29 @@ export default function UserMenu({ user }: { user: User }) {
               className={`${ITEM} md:hidden`}
             >
               <ThemeIcon size={16} aria-hidden="true" />
-              Switch to {nextTheme} theme
+              {themeLabel}
             </button>
+            {/* Language: each name in its own script. Checked = the language in use. */}
+            <div role="group" aria-label={t('language.label')}>
+              {LANGUAGES.map((l) => (
+                <button
+                  key={l.code}
+                  type="button"
+                  role="menuitemradio"
+                  aria-checked={language === l.code}
+                  lang={l.code}
+                  tabIndex={-1}
+                  onClick={() => {
+                    setLanguage(l.code)
+                    close(true)
+                  }}
+                  className={ITEM}
+                >
+                  <Check size={16} aria-hidden="true" className={language === l.code ? '' : 'invisible'} />
+                  {l.name}
+                </button>
+              ))}
+            </div>
             <button
               type="button"
               role="menuitem"
@@ -148,7 +174,7 @@ export default function UserMenu({ user }: { user: User }) {
               className={ITEM}
             >
               <LogOut size={16} aria-hidden="true" />
-              Log out
+              {t('auth.logout')}
             </button>
           </div>
         </div>

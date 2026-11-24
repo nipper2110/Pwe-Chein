@@ -10,7 +10,8 @@
   --color-on-pitch: #022c22; /* text on green buttons */
   --color-chip: rgb(255 255 255 / 0.9); /* white chip behind league logos, so dark logos stay visible */
 
-  --font-sans: "Inter", "Noto Sans Myanmar", system-ui, sans-serif;
+  /* Inter has no Burmese or Thai letters, so the browser falls through to the Noto fonts for those scripts. */
+  --font-sans: "Inter", "Noto Sans Myanmar", "Noto Sans Thai", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
   --font-burmese: "Noto Sans Myanmar", sans-serif;
   --font-pixel: "Press Start 2P", ui-monospace, monospace;
@@ -86,6 +87,22 @@ body {
 /* <main> gets focus after page changes (for screen readers); it should not show a ring. */
 [tabindex="-1"]:focus {
   outline: none;
+}
+
+/*
+ * Burmese and Thai put vowel and tone marks above and below the letters, so they need taller lines than
+ * Latin text. Truncated text is clipped to its line box, which would cut those marks off, so in these
+ * languages it gets extra line height.
+ */
+:lang(my) .truncate,
+:lang(th) .truncate {
+  line-height: 1.9;
+}
+
+/* Paragraphs and headings that wrap onto several lines need the same extra room between lines. */
+:lang(my) :where(p, h1, h2, h3, h4, li),
+:lang(th) :where(p, h1, h2, h3, h4, li) {
+  line-height: 1.75;
 }
 
 /* Respect "reduce motion" settings: no pulsing. */

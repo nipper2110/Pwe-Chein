@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import type { TopScorer } from '../types/league'
 
 export default function TopScorersList({ scorers }: { scorers: TopScorer[] }) {
+  const { t } = useTranslation()
   return (
     <ol className="overflow-hidden rounded-xl bg-surface">
       {scorers.map((s, i) => {
@@ -14,10 +16,10 @@ export default function TopScorersList({ scorers }: { scorers: TopScorer[] }) {
               <p className="flex items-center gap-1 truncate text-xs text-slate-400">
                 {stats && <img src={stats.team.logo} alt="" loading="lazy" className="h-3.5 w-3.5 object-contain" />}
                 {stats?.team.name}
-                {stats?.goals.assists ? ` · ${stats.goals.assists} assists` : ''}
+                {stats?.goals.assists ? ` · ${t('league.assists', { count: stats.goals.assists })}` : ''}
               </p>
             </div>
-            <span className="font-mono text-lg font-bold text-pitch" title="Goals">
+            <span className="font-mono text-lg font-bold text-pitch" title={t('league.goals')}>
               {stats?.goals.total ?? 0}
             </span>
           </li>

@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next'
+import { useFormat } from '../hooks/useFormat'
 import type { TeamDetail } from '../types/team'
 import FollowButton from './FollowButton'
 
@@ -12,6 +14,8 @@ function Fact({ label, value }: { label: string; value: string | number | null }
 }
 
 export default function TeamHeader({ data }: { data: TeamDetail }) {
+  const { t } = useTranslation()
+  const format = useFormat()
   const { team, venue } = data
   return (
     <section className="flex flex-wrap items-center gap-4 rounded-xl bg-surface p-4">
@@ -22,10 +26,10 @@ export default function TeamHeader({ data }: { data: TeamDetail }) {
           <FollowButton teamId={team.id} teamName={team.name} />
         </div>
         <dl className="mt-2 grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
-          <Fact label="Country" value={team.country} />
-          <Fact label="Founded" value={team.founded} />
-          <Fact label="Stadium" value={venue.name} />
-          <Fact label="Capacity" value={venue.capacity ? venue.capacity.toLocaleString() : null} />
+          <Fact label={t('team.country')} value={team.country} />
+          <Fact label={t('team.founded')} value={team.founded} />
+          <Fact label={t('team.stadium')} value={venue.name} />
+          <Fact label={t('team.capacity')} value={venue.capacity ? format.number(venue.capacity) : null} />
         </dl>
       </div>
     </section>

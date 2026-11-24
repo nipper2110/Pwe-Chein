@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
 import { User, type IFavoriteTeam } from "../models/User.js";
+import { sendError } from "../utils/httpError.js";
 import { getTeamInfo } from "../services/apiFootball.js";
 
 const MAX_FAVORITES = 20;
@@ -15,7 +16,7 @@ export async function listFavorites(req: Request, res: Response, next: NextFunct
   try {
     const user = await User.findById(req.userId);
     if (!user) {
-      res.status(401).json({ error: "Not logged in" });
+      sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");
       return;
     }
     res.json(toJson(user.favorites));
@@ -28,7 +29,7 @@ export async function listFavorites(req: Request, res: Response, next: NextFunct
 export async function followTeam(req: Request, res: Response, next: NextFunction): Promise<void> {
   const parsed = paramsSchema.safeParse(req.params);
   if (!parsed.success) {
-    res.status(400).json({ error: "Invalid team id" });
+    sendError(res, 400, "INVALID_TEAM_ID", "Invalid team id");
     return;
   }
   const { teamId } = parsed.data;
@@ -36,7 +37,7 @@ export async function followTeam(req: Request, res: Response, next: NextFunction
   try {
     const user = await User.findById(req.userId);
     if (!user) {
-      res.status(401).json({ error: "Not logged in" });
+      sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");
       return;
     }
     if (user.favorites.some((f) => f.teamId === teamId)) {
@@ -44,14 +45,14 @@ export async function followTeam(req: Request, res: Response, next: NextFunction
       return;
     }
     if (user.favorites.length >= MAX_FAVORITES) {
-      res.status(400).json({ error: `You can follow up to ${MAX_FAVORITES} teams. Unfollow one first.` });
+      sendError(res, 400, "FAVORITES_LIMIT", `You can follow up to ${MAX_FAVORITES} teams. Unfollow one first.`, { max: MAX_FAVORITES });
       return;
     }
 
     // The SERVER looks up the team's name and logo (usually from our cache), so the client cannot send fake data.
     const info = await getTeamInfo(teamId);
     if (!info) {
-      res.status(404).json({ error: "Team not found" });
+      sendError(res, 404, "TEAM_NOT_FOUND", "Team not found");
       return;
     }
     user.favorites.push({ teamId, name: info.team.name, logo: info.team.logo });
@@ -66,13 +67,13 @@ export async function followTeam(req: Request, res: Response, next: NextFunction
 export async function unfollowTeam(req: Request, res: Response, next: NextFunction): Promise<void> {
   const parsed = paramsSchema.safeParse(req.params);
   if (!parsed.success) {
-    res.status(400).json({ error: "Invalid team id" });
+    sendError(res, 400, "INVALID_TEAM_ID", "Invalid team id");
     return;
   }
   try {
     const user = await User.findByIdAndUpdate(req.userId, { $pull: { favorites: { teamId: parsed.data.teamId } } }, { new: true });
     if (!user) {
-      res.status(401).json({ error: "Not logged in" });
+      sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");
       return;
     }
     res.json(toJson(user.favorites));

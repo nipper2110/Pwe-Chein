@@ -1,5 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { z } from "zod";
+import { sendError } from "../utils/httpError.js";
 import { SUPPORTED_LEAGUES, getStandings, getTopScorers } from "../services/apiFootball.js";
 
 // Only our 6 leagues are allowed, so nobody can make us spend requests on other leagues.
@@ -10,7 +11,7 @@ const paramsSchema = z.object({
 function parseId(req: Request, res: Response): number | null {
   const parsed = paramsSchema.safeParse(req.params);
   if (!parsed.success) {
-    res.status(400).json({ error: parsed.error.issues[0]?.message ?? "Invalid league id" });
+    sendError(res, 400, "UNSUPPORTED_LEAGUE", parsed.error.issues[0]?.message ?? "Invalid league id");
     return null;
   }
   return parsed.data.id;

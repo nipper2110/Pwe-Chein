@@ -1,16 +1,17 @@
 import { Star, Trophy, UserRound } from 'lucide-react'
 import type { ComponentType } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom'
 import PixelBallIcon from './PixelBallIcon'
 
-// `paths`: the pages where the tab counts as "current". Login and Sign up belong to the Account tab.
 type TabIcon = ComponentType<{ size?: number; 'aria-hidden'?: boolean }>
 
-const TABS: { to: string; label: string; icon: TabIcon; size: number; paths: string[] }[] = [
-  { to: '/', label: 'Matches', icon: PixelBallIcon, size: 24, paths: ['/'] },
-  { to: '/league', label: 'Leagues', icon: Trophy, size: 20, paths: ['/league'] },
-  { to: '/dashboard', label: 'My teams', icon: Star, size: 20, paths: ['/dashboard'] },
-  { to: '/account', label: 'Account', icon: UserRound, size: 20, paths: ['/account', '/login', '/register'] },
+// `paths`: the pages where the tab counts as "current". Login and Sign up belong to the Account tab.
+const TABS: { to: string; label: 'nav.matches' | 'nav.leagues' | 'nav.myTeams' | 'nav.account'; icon: TabIcon; size: number; paths: string[] }[] = [
+  { to: '/', label: 'nav.matches', icon: PixelBallIcon, size: 24, paths: ['/'] },
+  { to: '/league', label: 'nav.leagues', icon: Trophy, size: 20, paths: ['/league'] },
+  { to: '/dashboard', label: 'nav.myTeams', icon: Star, size: 20, paths: ['/dashboard'] },
+  { to: '/account', label: 'nav.account', icon: UserRound, size: 20, paths: ['/account', '/login', '/register'] },
 ]
 
 const isCurrent = (pathname: string, paths: string[]): boolean =>
@@ -18,11 +19,12 @@ const isCurrent = (pathname: string, paths: string[]): boolean =>
 
 /** Fixed tab bar at the bottom of the screen on phones. Hidden from md up, where the header has the nav. */
 export default function BottomTabBar() {
+  const { t } = useTranslation()
   const { pathname } = useLocation()
 
   return (
     <nav
-      aria-label="Mobile"
+      aria-label={t('nav.mobile')}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-slate-800 bg-surface/90 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >
       <ul className="mx-auto grid max-w-3xl grid-cols-4">
@@ -38,7 +40,7 @@ export default function BottomTabBar() {
                 }`}
               >
                 <Icon size={size} aria-hidden={true} />
-                {label}
+                {t(label)}
               </Link>
             </li>
           )

@@ -1,6 +1,7 @@
 import type { CookieOptions, NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "../config.js";
+import { sendError } from "../utils/httpError.js";
 
 export const COOKIE_NAME = "pwechein_token";
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
@@ -38,7 +39,7 @@ declare global {
 export function requireAuth(req: Request, res: Response, next: NextFunction): void {
   const token: unknown = req.cookies?.[COOKIE_NAME];
   if (typeof token !== "string") {
-    res.status(401).json({ error: "Not logged in" });
+    sendError(res, 401, "NOT_LOGGED_IN", "Not logged in");
     return;
   }
   try {
@@ -47,6 +48,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction): vo
     req.userId = payload.sub;
     next();
   } catch {
-    res.status(401).json({ error: "Session expired. Please log in again." });
+    sendError(res, 401, "SESSION_EXPIRED", "Session expired. Please log in again.");
   }
 }

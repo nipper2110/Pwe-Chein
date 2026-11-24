@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { LANGUAGES, type Language } from "../utils/languages.js";
 
 export interface IFavoriteTeam {
   teamId: number;
@@ -13,6 +14,8 @@ export interface IUser {
   email: string;
   passwordHash: string; // a bcrypt hash, never the real password
   favorites: IFavoriteTeam[];
+  /** The language the user picked. Missing for accounts made before translations existed. */
+  language?: Language;
   createdAt: Date;
 }
 
@@ -27,6 +30,7 @@ const userSchema = new Schema<IUser>({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   passwordHash: { type: String, required: true },
   favorites: { type: [favoriteSchema], default: [] },
+  language: { type: String, enum: LANGUAGES },
   createdAt: { type: Date, default: Date.now },
 });
 

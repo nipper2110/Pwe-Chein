@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import DatePicker from '../components/DatePicker'
 import EmptyState from '../components/EmptyState'
 import ErrorState from '../components/ErrorState'
@@ -29,11 +30,8 @@ function groupByLeague(fixtures: Fixture[]): { league: Fixture['league']; matche
 }
 
 export default function Home() {
-  usePageMeta({
-    title: "Today's Football Fixtures & Live Scores",
-    description:
-      'Live scores and fixtures for the Premier League, La Liga, Serie A, Bundesliga, Ligue 1 and Champions League, grouped by league in your time zone.',
-  })
+  const { t } = useTranslation()
+  usePageMeta({ title: t('home.metaTitle'), description: t('home.metaDescription') })
   const [date, setDate] = useState(() => toISODate(new Date()))
   const now = useNow(60_000)
   const isToday = date === toISODate(new Date(now))
@@ -52,21 +50,21 @@ export default function Home() {
 
   return (
     <PageLayout>
-      <h1 className="sr-only">Live football scores and fixtures</h1>
+      <h1 className="sr-only">{t('home.heading')}</h1>
       <p className="flex items-center gap-2 text-xs text-slate-400">
-        <SeasonBadge /> Standings and top scorers use this season (free API plan limit).
+        <SeasonBadge /> {t('home.seasonNote')}
       </p>
 
       <DatePicker value={date} now={now} onChange={setDate} />
 
       {day.isPending && <MatchListSkeleton />}
-      {day.isError && <ErrorState message={day.error.message} onRetry={() => void day.refetch()} />}
+      {day.isError && <ErrorState error={day.error} onRetry={() => void day.refetch()} />}
 
       {day.isSuccess && (
         <>
-          {liveMatches.length > 0 && <LeagueSection title="🔴 Live now" matches={liveMatches} />}
+          {liveMatches.length > 0 && <LeagueSection title={`🔴 ${t('live.now')}`} matches={liveMatches} />}
           {groups.length === 0 && liveMatches.length === 0 && (
-            <EmptyState text="No matches in our 6 leagues on this day." />
+            <EmptyState text={t('home.noMatches')} />
           )}
           {groups.map((g) => (
             <LeagueSection key={g.league.id} title={g.league.name} logo={g.league.logo} matches={g.matches} />

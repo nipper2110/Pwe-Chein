@@ -1,30 +1,28 @@
-// Friendly names for the statistic types API-Football sends (keys are lower-case).
-const LABELS: Record<string, string> = {
-  'ball possession': 'Possession',
-  expected_goals: 'Expected goals (xG)',
-  goals_prevented: 'Goals prevented',
-  'total shots': 'Total shots',
-  'shots on goal': 'Shots on target',
-  'shots off goal': 'Shots off target',
-  'shots insidebox': 'Shots inside box',
-  'shots outsidebox': 'Shots outside box',
-  'blocked shots': 'Blocked shots',
-  'corner kicks': 'Corner kicks',
-  offsides: 'Offsides',
-  fouls: 'Fouls',
-  'yellow cards': 'Yellow cards',
-  'red cards': 'Red cards',
-  'goalkeeper saves': 'Goalkeeper saves',
-  'total passes': 'Total passes',
-  'passes accurate': 'Accurate passes',
-  'passes %': 'Pass accuracy',
-  'free kicks': 'Free kicks',
+// API-Football's statistic names (lower-case) -> our translation key under "stats.".
+export const STAT_KEYS: Record<string, string> = {
+  'ball possession': 'possession',
+  expected_goals: 'expectedGoals',
+  goals_prevented: 'goalsPrevented',
+  'total shots': 'totalShots',
+  'shots on goal': 'shotsOnTarget',
+  'shots off goal': 'shotsOffTarget',
+  'shots insidebox': 'shotsInsideBox',
+  'shots outsidebox': 'shotsOutsideBox',
+  'blocked shots': 'blockedShots',
+  'corner kicks': 'cornerKicks',
+  offsides: 'offsides',
+  fouls: 'fouls',
+  'yellow cards': 'yellowCards',
+  'red cards': 'redCards',
+  'goalkeeper saves': 'goalkeeperSaves',
+  'total passes': 'totalPasses',
+  'passes accurate': 'accuratePasses',
+  'passes %': 'passAccuracy',
+  'free kicks': 'freeKicks',
 }
 
-/** Unknown types still look decent: "some_new_stat" -> "Some new stat". */
-export function statLabel(type: string): string {
-  const known = LABELS[type.toLowerCase()]
-  if (known) return known
+/** A statistic we have no translation for still looks decent: "some_new_stat" -> "Some new stat" (English). */
+export function prettifyStat(type: string): string {
   const text = type.replace(/_/g, ' ').trim()
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
