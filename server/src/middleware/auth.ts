@@ -8,12 +8,16 @@ const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const isProd = config.NODE_ENV === "production";
 
 // httpOnly: JavaScript in the browser can never read the token (protects against XSS theft).
-// In production the client (Vercel) and server (Render) are on different sites, so the cookie
-// needs sameSite "none" + secure (HTTPS only). In development "lax" is enough.
+// The browser only ever talks to ONE site: the Vercel domain, which rewrites /api/* to Render. So the cookie
+// belongs to the Vercel domain (no "Domain" attribute = that exact host only) and is same-site:
+//  - sameSite "lax": sent on normal visits and our own requests, NOT on requests from other websites
+//    (this also protects against CSRF). It works in Safari and with "block third-party cookies".
+//  - secure: HTTPS only, in production.
+// (Do not use "none": that is only for a browser talking to a different site than the page, which we avoid.)
 export const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: isProd,
-  sameSite: isProd ? "none" : "lax",
+  sameSite: "lax",
   path: "/",
 };
 

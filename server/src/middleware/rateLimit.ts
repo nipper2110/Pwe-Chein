@@ -76,6 +76,21 @@ export const loginAccountLimiter = limiter({
   key: ipAndEmail,
 });
 
+/**
+ * ...and 15 failed logins per ACCOUNT per hour, no matter where they come from. The two limits above include the
+ * visitor's IP, so someone who can fake their IP (for example by calling the Render URL directly) would get a fresh
+ * allowance for every fake address. This one ignores the IP completely, so it cannot be dodged that way.
+ * Trade-off: someone can lock a stranger's account for an hour by failing 15 times. We accept that.
+ */
+export const loginEmailLimiter = limiter({
+  scope: "loginAccount",
+  windowMs: 60 * MINUTE,
+  limit: 15,
+  message: "Too many failed logins for this account.",
+  onlyFailures: true,
+  key: (req) => (typeof req.body?.email === "string" ? req.body.email.trim().toLowerCase().slice(0, 254) : "no-email"),
+});
+
 /** ...and 20 failed logins per visitor in total, so trying many different emails does not help either. */
 export const loginIpLimiter = limiter({
   scope: "loginIp",

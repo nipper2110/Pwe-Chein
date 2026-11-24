@@ -9,6 +9,26 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is missing in server/.env"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must be at least 32 characters (see .env.example)"),
   NODE_ENV: z.string().default("development"),
+  // How many proxies sit between the internet and Express. See index.ts. Production default: 2.
+  // An empty value (e.g. a blank line copied from .env.example) counts as "not set", not as 0.
+  TRUST_PROXY_HOPS: z.preprocess((v) => (v === "" ? undefined : v), z.coerce.number().int().min(0).max(5).optional()),
+  // Turns on GET /api/_ip, a temporary helper to check what IP Express sees after deploying.
+  DEBUG_IP_ENDPOINT: z
+    .string()
+    .default("false")
+    .transform((v) => v.toLowerCase() === "true"),
 });
 
-export const config = envSchema.parse(process.env);
+const parsed = envSchema.parse(process.env);
+
+export const config = {
+  ...parsed,
+  /**
+   * Proxies in front of Express. In production the chain is:
+   *   browser -> Vercel (rewrite of /api/*) -> Render's load balancer -> Express
+   * Vercel puts the visitor's IP in X-Forwarded-For, and Render's load balancer adds the address it
+   * saw (Vercel's) on the right. So Express must trust 2 hops to read the visitor's IP.
+   * Locally there is no proxy, so 0 (never trust X-Forwarded-For, which anyone can fake).
+   */
+  trustProxyHops: parsed.TRUST_PROXY_HOPS ?? (parsed.NODE_ENV === "production" ? 2 : 0),
+};
